@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Core SEO Meta Tags -->
+    <title>FAIRY Tales</title>
+    <meta
+      name="description"
+      content="Discover a magical world of fairy tales with unlimited stories for kids and adults. Enjoy timeless adventures, family bonding, and creative inspiration."
+    />
+    <meta
+      name="keywords"
+      content="fairy tales, bedtime stories, children stories, family reading, magical adventures"
+    />
+    <meta name="author" content="Fary Talse Team" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph (OG) Tags for Social Media -->
+    <meta
+      property="og:title"
+      content="Fairy Tales - Enchanting Stories for All Ages"
+    />
+    <meta
+      property="og:description"
+      content="Explore enchanting fairy tales for kids and adults. Unlimited stories to spark imagination and create family memories."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.farytalse.com/" />
+    <meta
+      property="og:image"
+      content="https://www.farytalse.com/og-image.jpg"
+    />
+    <meta
+      property="og:image:alt"
+      content="Illustration of magical fairy tale characters"
+    />
+    <meta property="og:site_name" content="Fary Talse" />
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Fairy Tales - Enchanting Stories for All Ages"
+    />
+    <meta
+      name="twitter:description"
+      content="Explore enchanting fairy tales for kids and adults. Unlimited stories to spark imagination."
+    />
+    <meta
+      name="twitter:image"
+      content="https://www.farytalse.com/og-image.jpg"
+    />
+
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/png" href="/public/vector.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.farytalse.com/" />
+
+    <!-- Preload important resources -->
+    <link rel="preload" href="/src/main.tsx" as="script" />
+  </head>
+  <body>
+    <!-- Semantic wrapper for better structure -->
+    <main id="root" aria-label="Main content"></main>
+
+    <!-- Script with defer for better performance -->
+    <script type="module" src="/src/main.tsx" defer></script>
+
+    <!-- Structured Data (JSON-LD) for Rich Snippets -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Fary Talse",
+        "url": "https://www.farytalse.com/",
+        "description": "A collection of enchanting fairy tales for children and adults",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.farytalse.com/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+  </body>
+</html>
