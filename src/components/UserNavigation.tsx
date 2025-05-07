@@ -14,7 +14,6 @@ export default function UserProfileNav({ isMobile = false }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Load user data on component mount
   useEffect(() => {
     const storedUserData = localStorage.getItem("userData");
     if (storedUserData) {
@@ -29,7 +28,6 @@ export default function UserProfileNav({ isMobile = false }) {
     }
   }, []);
 
-  // Handle logout
   const handleLogout = () => {
     if (userData) {
       localStorage.setItem(
@@ -39,19 +37,12 @@ export default function UserProfileNav({ isMobile = false }) {
           isLoggedIn: false,
         })
       );
-
-      // Clear user data from state
       setUserData(null);
-
-      // Close dropdown if open
       setDropdownOpen(false);
-
-      // Navigate to login page
       navigate("/login");
     }
   };
 
-  // Hangle My Favorite
   const handleMyFavorite = () => {
     if (userData) {
       localStorage.setItem(
@@ -61,26 +52,21 @@ export default function UserProfileNav({ isMobile = false }) {
           isLoggedIn: false,
         })
       );
-
-      // Close dropdown if open
       setDropdownOpen(false);
-
-      // Navigate to login page
       navigate("/favorite");
     }
   };
 
-  // Toggle dropdown menu
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
-  // Mobile version of user navigation
+  // Mobile version
   if (isMobile) {
     return userData && userData.isLoggedIn ? (
       <div className="block">
-        <div className="flex items-center space-x-3 text-white">
-          <div className="w-8 h-8 rounded-full bg-[#FF0E4D] flex items-center justify-center text-white font-bold">
+        <div className="flex items-center space-x-3 text-green-600">
+          <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-black font-bold">
             {userData.fullName
               ? userData.fullName.charAt(0).toUpperCase()
               : userData.email.charAt(0).toUpperCase()}
@@ -88,16 +74,15 @@ export default function UserProfileNav({ isMobile = false }) {
           <span className="text-lg truncate max-w-[150px]">
             {userData.fullName || userData.email.split("@")[0]}
           </span>
-          {/* call to action */}
           <button
             onClick={handleMyFavorite}
-            className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800"
+            className="block w-full text-left px-4 py-2 text-sm text-green-600 hover:bg-green-700 hover:text-white transition"
           >
             My Favorite
           </button>
           <button
             onClick={handleLogout}
-            className="ml-2 text-sm text-gray-300 hover:text-[#FF0E4D]"
+            className="ml-2 text-sm text-green-600 hover:text-green-800 transition"
           >
             Logout
           </button>
@@ -105,7 +90,7 @@ export default function UserProfileNav({ isMobile = false }) {
       </div>
     ) : (
       <Link to="/register" className="block">
-        <button className="flex items-center space-x-3 text-white hover:text-[#FF0E4D] transition-colors duration-300">
+        <button className="flex items-center space-x-3 text-green-600 hover:text-green-400 transition-colors duration-300">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 448 512"
@@ -120,16 +105,16 @@ export default function UserProfileNav({ isMobile = false }) {
     );
   }
 
-  // Desktop version of user navigation
+  // Desktop version
   return (
     <li className="relative">
       {userData && userData.isLoggedIn ? (
         <>
           <button
             onClick={toggleDropdown}
-            className="flex items-center justify-center text-white p-2 rounded-full hover:bg-gray-800 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#FF0E4D]"
+            className="flex items-center justify-center text-white p-2 rounded-full hover:bg-green-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-500"
           >
-            <div className="w-6 h-6 rounded-full bg-[#FF0E4D] flex items-center justify-center text-white font-bold">
+            <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-black font-bold">
               {userData.fullName
                 ? userData.fullName.charAt(0).toUpperCase()
                 : userData.email.charAt(0).toUpperCase()}
@@ -137,7 +122,6 @@ export default function UserProfileNav({ isMobile = false }) {
             <span className="sr-only">User menu</span>
           </button>
 
-          {/* Dropdown menu */}
           {dropdownOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-gray-900 rounded-md shadow-lg py-1 z-10">
               <div className="px-4 py-2 text-sm text-white border-b border-gray-700">
@@ -148,16 +132,15 @@ export default function UserProfileNav({ isMobile = false }) {
                   {userData.email}
                 </p>
               </div>
-              {/* call to action */}
               <button
                 onClick={handleMyFavorite}
-                className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800"
+                className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-green-700 transition"
               >
                 My Favorite
               </button>
               <button
                 onClick={handleLogout}
-                className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800"
+                className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-green-700 transition"
               >
                 Logout
               </button>
@@ -166,7 +149,7 @@ export default function UserProfileNav({ isMobile = false }) {
         </>
       ) : (
         <Link to="/register">
-          <button className="text-white p-2 rounded-full hover:bg-gray-800 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#FF0E4D]">
+          <button className="text-blue-500 p-2 rounded-full hover:bg-blue-200 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 448 512"
