@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import LogoImage from "../assets/Screenshot_from_2025-05-07_16-17-36-removebg-preview.png";
+import LogoImage from "../assets/logonew.png";
 import { ThemeContext } from "../Layout/ThemeContext";
 import UserProfileNav from "../components/UserNavigation";
 import { Link } from "react-router-dom";
@@ -12,9 +12,8 @@ interface NavItem {
 const NavItems: NavItem[] = [
   { name: "HOME", link: "/" },
   { name: "BLOG", link: "/productblog" },
-  { name: "FUTURE", link: "/productblog" },
   { name: "ABOUT", link: "/productblog" },
-  { name: "CONTACT", link: "/productblog" },
+  { name: "CONTACT", link: "/contact" },
 ];
 
 export default function Navbar() {
