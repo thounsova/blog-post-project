@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import LogoImage from "../assets/logonew.png";
+import LogoImage from "../assets/mmmm.png";
 import { ThemeContext } from "../Layout/ThemeContext";
 import UserProfileNav from "../components/UserNavigation";
 import { Link } from "react-router-dom";
@@ -26,17 +26,20 @@ export default function Navbar() {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-gray-100 shadow-lg md:shadow-xl transition-all">
+    <header className="fixed top-0 left-0 w-full z-10 bg-gray-100    shadow-lg md:shadow-xl transition-all">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <img src={LogoImage} alt="Logo" className="w-32 sm:w-40" />
+          <img src={LogoImage} alt="Logo" className="h-[55px]" />
+          <h1 className="text-2xl mt-1.5 font-semibold text-blue-500 hover:text-green-700 transition duration-300 ease-in-out">
+            beatleap
+          </h1>
         </Link>
 
         {/* Mobile Menu Button */}
         <button
           onClick={toggleMenu}
-          className="lg:hidden p-2 rounded-md bg-gray-700 text-blue-500 transition-all hover:bg-gray-600"
+          className="lg:hidden p-2 rounded-md  text-blue-500 transition-all hover:bg-gray-600"
         >
           {isOpen ? (
             <svg
@@ -77,7 +80,7 @@ export default function Navbar() {
             <Link
               key={item.name}
               to={item.link}
-              className="text-sm text-gray-900 dark:text-gray-100 hover:text-blue-500 transition-colors"
+              className="text-sm text-gray-950  hover:text-blue-500 transition-colors"
             >
               {item.name}
             </Link>
@@ -86,7 +89,7 @@ export default function Navbar() {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="ml-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 dark:bg-gray-700 text-black dark:text-white transition-colors hover:bg-gray-400 dark:hover:bg-gray-600"
+            className="ml-4 w-8 h-8 flex items-center justify-center rounded-full  transition-colors hover:bg-blue-300"
           >
             {theme === "dark" ? "🌙" : "☀️"}
           </button>
@@ -98,7 +101,7 @@ export default function Navbar() {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed top-0 right-0 h-full w-64 bg-white dark:bg-gray-900 shadow-xl transform transition-transform duration-300 z-40 ${
+        className={`fixed top-0 right-0 h-full w-64 bg-gray-100 shadow-xl transform transition-transform duration-300 z-40 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -108,24 +111,14 @@ export default function Navbar() {
               key={item.name}
               to={item.link}
               onClick={() => setIsOpen(false)}
-              className="block text-sm text-gray-800 dark:text-white hover:text-blue-600 transition-colors"
+              className="block text-sm text-gray-950 hover:text-blue-600 transition-colors"
             >
               {item.name}
             </Link>
           ))}
 
           {/* Mobile Theme Toggle */}
-          <div className="flex items-center justify-between mt-6">
-            <span className="text-xs text-gray-700 dark:text-gray-300">
-              Theme
-            </span>
-            <button
-              onClick={toggleTheme}
-              className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-300 dark:bg-gray-700 text-black dark:text-white transition-colors hover:bg-blue-400 dark:hover:bg-gray-600"
-            >
-              {theme === "dark" ? "🌙" : "☀️"}
-            </button>
-          </div>
+          <div className="flex items-center justify-between mt-6"></div>
 
           {/* User Profile */}
           <UserProfileNav isMobile={true} />

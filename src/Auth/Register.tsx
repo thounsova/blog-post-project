@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router";
-import RegisterBackground from "../assets/door-stretching-into-fantasy-world.jpg";
 
 // Form data structure
 interface RegisterFormData {
@@ -167,22 +166,21 @@ export default function Register() {
   return (
     <section
       className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
-      style={{ backgroundImage: `url(${RegisterBackground})` }}
+      style={{ backgroundImage: `url()` }}
     >
-      <div className="w-full max-w-md p-6 rounded-lg border-2 border-white backdrop-blur-sm">
+      <div className="w-full max-w-md p-6 rounded-lg border-2 border-white dark:border-gray-700 dark:bg-gray-800/80 backdrop-blur-sm shadow-2xl transition-colors duration-300">
+        {" "}
         <h1 className="text-2xl font-bold text-center text-dark mb-6">
           Create an Account
         </h1>
-
         {errors.general && (
-          <div className="mb-4 p-2 bg-red-500 bg-opacity-80 text-white rounded-md text-sm">
+          <div className="mb-4 p-2 bg-red-500 bg-opacity-80  rounded-md text-sm">
             {errors.general}
           </div>
         )}
-
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="username" className="block text-sm text-white mb-1">
+            <label htmlFor="username" className="block text-sm  mb-1">
               Username
             </label>
             <input
@@ -192,7 +190,7 @@ export default function Register() {
               value={formData.username}
               onChange={handleChange}
               className={`w-full px-3 py-2 bg-white/60 border rounded-md text-black placeholder-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF0E4D] ${
-                errors.username ? "border-red-500" : "border-gray-300"
+                errors.username ? "border-red-500" : ""
               }`}
               placeholder="Choose a username"
             />
@@ -202,7 +200,7 @@ export default function Register() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="email" className="block text-sm text-white mb-1">
+            <label htmlFor="email" className="block text-sm mb-1">
               Email
             </label>
             <input
@@ -212,7 +210,7 @@ export default function Register() {
               value={formData.email}
               onChange={handleChange}
               className={`w-full px-3 py-2 bg-white/60 border rounded-md text-black placeholder-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF0E4D] ${
-                errors.email ? "border-red-500" : "border-gray-300"
+                errors.email ? "border-red-500" : ""
               }`}
               placeholder="Your email address"
             />
@@ -222,7 +220,7 @@ export default function Register() {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="password" className="block text-sm text-white mb-1">
+            <label htmlFor="password" className="block text-sm  mb-1">
               Password
             </label>
             <input
@@ -232,7 +230,7 @@ export default function Register() {
               value={formData.password}
               onChange={handleChange}
               className={`w-full px-3 py-2 bg-white/60 border rounded-md text-black placeholder-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF0E4D] ${
-                errors.password ? "border-red-500" : "border-gray-300"
+                errors.password ? "border-red-500" : ""
               }`}
               placeholder="Create a password"
             />
@@ -242,10 +240,7 @@ export default function Register() {
           </div>
 
           <div className="mb-4">
-            <label
-              htmlFor="confirmPassword"
-              className="block text-sm text-white mb-1"
-            >
+            <label htmlFor="confirmPassword" className="block text-sm  mb-1">
               Confirm Password
             </label>
             <input
@@ -255,7 +250,7 @@ export default function Register() {
               value={formData.confirmPassword}
               onChange={handleChange}
               className={`w-full px-3 py-2 bg-white/60 border rounded-md text-black placeholder-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF0E4D] ${
-                errors.confirmPassword ? "border-red-500" : "border-gray-300"
+                errors.confirmPassword ? "border-red-500" : ""
               }`}
               placeholder="Confirm your password"
             />
@@ -275,9 +270,9 @@ export default function Register() {
           </button>
 
           <div className="mt-4 text-center">
-            <p className="text-sm text-white">
+            <p className="text-sm ">
               Already have an account?{" "}
-              <Link to="/login" className="text-blue-300 hover:text-blue-400">
+              <Link to="/login" className="text-blue-500 hover:text-blue-700">
                 Login here
               </Link>
             </p>
