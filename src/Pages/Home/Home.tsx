@@ -1,5 +1,6 @@
-const Home = () => {
-  return <div className="flex "></div>;
-};
+import Hero from "./components/hero";
+function App() {
+  return <Hero />;
+}
 
-export default Home;
+export default App;
