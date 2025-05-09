@@ -26,7 +26,7 @@ export default function Navbar() {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-gray-100 dark:bg-gray-800 shadow-lg md:shadow-xl transition-all">
+    <header className="fixed top-0 left-0 w-full z-50 bg-gray-100 shadow-lg md:shadow-xl transition-all">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center">
@@ -77,7 +77,7 @@ export default function Navbar() {
             <Link
               key={item.name}
               to={item.link}
-              className="text-sm text-gray-900 dark:text-gray-100 hover:text-blue-500 transition-colors"
+              className="text-sm  hover:text-blue-500 transition-colors"
             >
               {item.name}
             </Link>
@@ -86,7 +86,7 @@ export default function Navbar() {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="ml-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 dark:bg-gray-700 text-black dark:text-white transition-colors hover:bg-gray-400 dark:hover:bg-gray-600"
+            className="ml-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 bg-gray-700  transition-colors hover:bg-gray-400 hover:bg-gray-600"
           >
             {theme === "dark" ? "🌙" : "☀️"}
           </button>
