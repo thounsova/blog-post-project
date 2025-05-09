@@ -32,8 +32,10 @@ export default function Navbar() {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
+
     <header className="fixed top-0 left-0 w-full z-50 bg-gray-100 shadow-lg md:shadow-xl transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
           <img src={LogoImage} alt="Logo" className="h-[50px]" />
