@@ -7,7 +7,7 @@ const Blog: React.FC = () => {
       <img
         src="https://media.istockphoto.com/id/500593190/photo/composition-finger-frame-mans-hands-capture-the-sunset.jpg?s=612x612&w=0&k=20&c=S7cuvvC_hlu39Fj5jon6__3DD0j265aAsqvYX4C0lEM="
         alt="Blog cover"
-        className="w-full h-48 object-cover cosur-pointer"
+        className="w-full h-48 object-cover "
       />
 
       {/* Content */}
