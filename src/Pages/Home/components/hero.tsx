@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion"; // 👈 Import framer-motion
 import {
   DollarSign,
   Timer,
@@ -26,14 +27,19 @@ const HeroWithCards: React.FC = () => {
       <section className="py-12 md:py-20 mt-[80px]">
         <div className="container mx-auto px-4 md:px-8 lg:px-16 flex flex-col-reverse lg:flex-row items-center gap-12">
           {/* Text Content */}
-          <div className="w-full lg:w-1/2 text-center lg:text-left">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="w-full lg:w-1/2 text-center lg:text-left"
+          >
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
               Get Paid{" "}
               <span className="text-blue-600">
                 by Selling Guest Posts & Publishing Content
               </span>
             </h1>
-            <p className="mt-4 text-base md:text-lg  leading-relaxed max-w-xl mx-auto lg:mx-0">
+            <p className="mt-4 text-base md:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
               Join thousands of bloggers on Blog Management by publishing
               high-quality content and earning handsomely. Sign up now and start
               making money today!
@@ -53,21 +59,26 @@ const HeroWithCards: React.FC = () => {
                 Sign Up Now
               </button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Image */}
-          <div className="w-full lg:w-1/2 flex justify-center">
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="w-full lg:w-1/2 flex justify-center"
+          >
             <img
               src={Images}
               alt="Person with laptop"
               className="w-full max-w-[250px] md:max-w-sm lg:max-w-md xl:max-w-lg"
             />
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Feature Cards Section */}
-      <section className="px-4 sm:px-6 lg:px-20 py-12 bg-white">
+      <section className="px-4 sm:px-6 lg:px-20 py-12 ">
         <h2 className="text-2xl md:text-3xl font-semibold text-center">
           <span className="text-blue-600 font-bold">40000+ Publishers</span>{" "}
           have chosen BM,
@@ -115,8 +126,12 @@ const HeroWithCards: React.FC = () => {
               desc: "Our dedicated team is here round-the-clock to solve your issues promptly.",
             },
           ].map(({ icon, title, desc }, index) => (
-            <div
+            <motion.div
               key={index}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
               className="bg-white shadow-sm p-6 rounded-xl border border-gray-100 hover:shadow-md transition"
             >
               {icon}
@@ -124,7 +139,7 @@ const HeroWithCards: React.FC = () => {
                 {title}
               </h3>
               <p className="text-sm text-gray-600 text-center">{desc}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
