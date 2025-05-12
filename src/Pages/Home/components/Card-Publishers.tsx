@@ -1,10 +1,17 @@
+import { motion } from "framer-motion";
 import images from "../../../assets/blog.png";
 
 function BlogManagementSection() {
   return (
     <div className="bg-blue-100 py-12 px-4 md:px-12 mt-6 flex flex-col-reverse md:flex-row items-center md:justify-between gap-10 shadow-lg">
       {/* Text Section */}
-      <div className="w-full md:w-1/2 text-center md:text-left">
+      <motion.div
+        className="w-full md:w-1/2 text-center md:text-left"
+        initial={{ opacity: 0, x: -50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true, amount: 0.4 }}
+      >
         <h2 className="text-2xl md:text-3xl font-semibold text-blue-700 mb-4">
           What is Blog Management?
         </h2>
@@ -17,24 +24,39 @@ function BlogManagementSection() {
           Publishers over $2 Million—making it the biggest and most profitable
           guest post platform.
         </p>
-        <div className="mt-6 flex flex-col-12 sm:flex-row justify-center md:justify-start gap-4">
-          <button className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
+
+        <div className="mt-6 flex flex-col-12 sm:flex-row justify-center sm:justify-start md:justify-start gap-4">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-blue-600 text-white py-2 px-6 border border-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+          >
             About Us
-          </button>
-          <button className="bg-gray-200 text-gray-700 py-2 px-6 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-300">
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="text-gray-500 py-2 px-6 border border-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-300"
+          >
             Contact Us
-          </button>
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Image Section */}
-      <div className="w-full md:w-1/2 flex justify-center">
+      <motion.div
+        className="w-full md:w-1/2 flex justify-center"
+        initial={{ opacity: 0, x: 50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        viewport={{ once: true, amount: 0.4 }}
+      >
         <img
           src={images}
           alt="Blog Management Illustration"
           className="w-full max-w-xs sm:max-w-sm md:max-w-md h-auto"
         />
-      </div>
+      </motion.div>
     </div>
   );
 }
