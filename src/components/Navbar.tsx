@@ -30,6 +30,12 @@ export default function Navbar() {
   const { theme, toggleTheme } = themeContext;
 
   return (
+    <header className="fixed top-0 left-0 w-full z-50 bg-gray-100 shadow-lg md:shadow-xl transition-all">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        {/* Logo */}
+        <Link to="/" className="flex items-center">
+          <img src={LogoImage} alt="Logo" className="w-32 sm:w-40" />
+        </Link>
     <>
       {/* Top Desktop Header */}
       <header className="fixed top-0  left-0 w-full z-50 bg-gray-100 shadow-lg">
@@ -47,6 +53,26 @@ export default function Navbar() {
               <UserProfileNav />
             </button>
           </div>
+
+        {/* Desktop Nav */}
+        <nav className="hidden lg:flex items-center gap-4 font-sans">
+          {NavItems.map((item) => (
+            <Link
+              key={item.name}
+              to={item.link}
+              className="text-sm  hover:text-blue-500 transition-colors"
+            >
+              {item.name}
+            </Link>
+          ))}
+
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="ml-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 bg-gray-700  transition-colors hover:bg-gray-400 hover:bg-gray-600"
+          >
+            {theme === "dark" ? "🌙" : "☀️"}
+          </button>
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-6">
