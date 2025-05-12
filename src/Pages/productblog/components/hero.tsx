@@ -21,7 +21,7 @@ const Hero = () => {
           <img
             src="/your-hero-image.png" // Replace with your image path
             alt="Hero Illustration"
-            className="w-full"
+            className="w-lg"
           />
         </div>
       </div>
