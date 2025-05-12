@@ -56,8 +56,6 @@ export default function Navbar() {
                 to={item.link}
                 className={`flex flex-col items-center ${
                   location.pathname === item.link
-                    ? "text-blue-600"
-                    : "text-gray-800"
                 } hover:text-blue-600 transition group`}
               >
                 <div className="p-2 rounded-full group-hover:bg-blue-100">

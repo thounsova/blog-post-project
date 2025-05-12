@@ -94,16 +94,30 @@ export default function UserProfileNav({ isMobile = false }) {
             onClick={toggleDropdown}
             className="flex items-center px-3 py-2 text-white bg-green-500 hover:bg-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none transition-colors duration-200 text-sm"
           >
-            <span className="font-semibold truncate max-w-[120px]">{userData.fullName || userData.email.split("@")[0]}</span>
-            <svg className="w-4 h-4 ml-2 text-green-200" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+            <span className="font-semibold truncate max-w-[120px]">
+              {userData.fullName || userData.email.split("@")[0]}
+            </span>
+            <svg
+              className="w-4 h-4 ml-2 text-green-200"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              ></path>
+            </svg>
             <span className="sr-only">User menu</span>
           </button>
 
           {dropdownOpen && (
             <div className="absolute right-0 mt-2 w-48 py-1 z-10 bg-white shadow-lg border border-gray-200">
-              <div className="px-3 py-2 text-sm text-gray-800 truncate">
-                <p className="font-medium truncate">{userData.fullName || userData.email.split("@")[0]}</p>
-                <p className="text-gray-500 text-xs truncate">{userData.email}</p>
+              <div className="px-3 py-2 text-sm  truncate">
+                <p className="font-medium truncate">
+                  {userData.fullName || userData.email.split("@")[0]}
+                </p>
               </div>
               <button
                 onClick={handleMyFavorite}
