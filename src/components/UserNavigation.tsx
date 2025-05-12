@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-// User data interface
 interface UserData {
   email: string;
   fullName?: string;
@@ -30,137 +29,110 @@ export default function UserProfileNav({ isMobile = false }) {
 
   const handleLogout = () => {
     if (userData) {
-      localStorage.setItem(
-        "userData",
-        JSON.stringify({
-          ...userData,
-          isLoggedIn: false,
-        })
-      );
+      localStorage.removeItem("userData");
       setUserData(null);
       setDropdownOpen(false);
-      navigate("/login");
+      navigate("/"); // Navigate to home after logout
     }
   };
 
   const handleMyFavorite = () => {
-    if (userData) {
-      localStorage.setItem(
-        "userData",
-        JSON.stringify({
-          ...userData,
-          isLoggedIn: false,
-        })
-      );
-      setDropdownOpen(false);
-      navigate("/favorite");
-    }
+    navigate("/favorite");
+    setDropdownOpen(false);
   };
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
   };
 
-  // Mobile version
+  // Mobile version (Small screen optimized, no rounded corners)
   if (isMobile) {
     return userData && userData.isLoggedIn ? (
-      <div className="block">
-        <div className="flex items-center space-x-3 text-green-600">
-          <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-black font-bold">
-            {userData.fullName
-              ? userData.fullName.charAt(0).toUpperCase()
-              : userData.email.charAt(0).toUpperCase()}
-          </div>
-          <span className="text-lg truncate max-w-[150px]">
+      <div className="p-2 bg-gray-100 shadow-sm">
+        <div className="flex items-center space-x-2 text-green-700">
+          <span className="text-sm font-semibold truncate max-w-[100px]">
             {userData.fullName || userData.email.split("@")[0]}
           </span>
-          <button
-            onClick={handleMyFavorite}
-            className="block w-full text-left px-4 py-2 text-sm text-green-600 hover:bg-green-700 hover:text-white transition"
-          >
-            My Favorite
-          </button>
-          <button
-            onClick={handleLogout}
-            className="ml-2 text-sm text-green-600 hover:text-green-800 transition"
-          >
-            Logout
-          </button>
+          <div className="flex space-x-1">
+            <button
+              onClick={handleMyFavorite}
+              className="px-2 py-1 text-xs text-white bg-green-500 hover:bg-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none transition-colors duration-200"
+            >
+              Favorites
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-2 py-1 text-xs text-white bg-red-500 hover:bg-red-600 focus:ring-2 focus:ring-red-400 focus:outline-none transition-colors duration-200"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     ) : (
-      <Link to="/register" className="block">
-        <button className="flex items-center space-x-3 text-green-600 hover:text-green-400 transition-colors duration-300">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-            className="w-5 h-5 fill-current"
-            aria-hidden="true"
-          >
-            <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z" />
-          </svg>
-          <span className="text-lg">Login</span>
-        </button>
-      </Link>
+      <div className="flex space-x-2">
+        <Link to="/login">
+          <button className="text-blue-600 bg-blue-50 hover:bg-blue-100 focus:ring-1 focus:ring-blue-300 focus:outline-none transition-colors duration-200 py-1 px-2 text-sm font-semibold shadow-sm border border-blue-200">
+            Log In
+          </button>
+        </Link>
+        <Link to="/register">
+          <button className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-1 focus:ring-blue-400 focus:outline-none transition-colors duration-200 py-1 px-2 text-sm font-semibold shadow-sm">
+            Register
+          </button>
+        </Link>
+      </div>
     );
   }
 
-  // Desktop version
+  // Desktop version (no rounded corners)
   return (
     <li className="relative">
       {userData && userData.isLoggedIn ? (
         <>
           <button
             onClick={toggleDropdown}
-            className="flex items-center justify-center text-white p-2 rounded-full hover:bg-green-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="flex items-center px-3 py-2 text-white bg-green-500 hover:bg-green-600 focus:ring-2 focus:ring-green-400 focus:outline-none transition-colors duration-200 text-sm"
           >
-            <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-black font-bold">
-              {userData.fullName
-                ? userData.fullName.charAt(0).toUpperCase()
-                : userData.email.charAt(0).toUpperCase()}
-            </div>
+            <span className="font-semibold truncate max-w-[120px]">{userData.fullName || userData.email.split("@")[0]}</span>
+            <svg className="w-4 h-4 ml-2 text-green-200" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
             <span className="sr-only">User menu</span>
           </button>
 
           {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-gray-900 rounded-md shadow-lg py-1 z-10">
-              <div className="px-4 py-2 text-sm text-white border-b border-gray-700">
-                <p className="font-medium truncate">
-                  {userData.fullName || userData.email.split("@")[0]}
-                </p>
-                <p className="text-gray-400 text-xs truncate">
-                  {userData.email}
-                </p>
+            <div className="absolute right-0 mt-2 w-48 py-1 z-10 bg-white shadow-lg border border-gray-200">
+              <div className="px-3 py-2 text-sm text-gray-800 truncate">
+                <p className="font-medium truncate">{userData.fullName || userData.email.split("@")[0]}</p>
+                <p className="text-gray-500 text-xs truncate">{userData.email}</p>
               </div>
               <button
                 onClick={handleMyFavorite}
-                className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-green-700 transition"
+                className="block w-full text-left px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:outline-none transition-colors duration-200"
               >
-                My Favorite
+                Favorites
               </button>
               <button
                 onClick={handleLogout}
-                className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-green-700 transition"
+                className="block w-full text-left px-3 py-2 text-sm text-gray-800 hover:bg-gray-100 focus:outline-none transition-colors duration-200"
               >
-                Logout
+                Log Out
               </button>
             </div>
           )}
         </>
       ) : (
-        <Link to="/register">
-          <button className="text-blue-500 p-2 rounded-full hover:bg-blue-200 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-500">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 448 512"
-              className="w-6 h-6 fill-current"
-              aria-hidden="true"
-            >
-              <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z" />
-            </svg>
-            <span className="sr-only">User account</span>
-          </button>
-        </Link>
+        <div className="flex space-x-1">
+          <Link to="/login">
+            <button className="text-blue-600 bg-blue-50 hover:bg-blue-100 focus:ring-1 focus:ring-blue-300 focus:outline-none transition-colors duration-200 py-2 px-3 text-sm font-semibold shadow-sm border border-blue-200">
+              Log In
+            </button>
+          </Link>
+          <Link to="/register">
+            <button className="text-white bg-gradient-to-r from-blue-500 to-indigo-500 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 focus:ring-1 focus:ring-indigo-300 focus:outline-none transition-colors duration-200 py-2 px-3 text-sm font-semibold shadow-sm">
+              Register
+            </button>
+          </Link>
+        </div>
       )}
     </li>
   );
