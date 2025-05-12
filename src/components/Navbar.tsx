@@ -1,9 +1,8 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home, FileText, Info, Phone, User } from "lucide-react";
-import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
-import LogoImage from "../assets/mmmm.png";
 import { ThemeContext } from "../Layout/ThemeContext";
+import LogoImage from "../assets/mmmm.png";
 import UserProfileNav from "../components/UserNavigation";
 
 interface NavItem {
@@ -12,34 +11,31 @@ interface NavItem {
   icon: JSX.Element;
 }
 
-const NavItems: NavItem[] = [
+const navItems: NavItem[] = [
   { name: "Home", link: "/", icon: <Home className="w-6 h-6" /> },
-  { name: "Blog", link: "/blog", icon: <FileText className="w-6 h-6" /> },
+  {
+    name: "Blog",
+    link: "/productblog",
+    icon: <FileText className="w-6 h-6" />,
+  },
   { name: "About", link: "/about", icon: <Info className="w-6 h-6" /> },
   { name: "Contact", link: "/contact", icon: <Phone className="w-6 h-6" /> },
 ];
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+const Navbar: React.FC = () => {
   const location = useLocation();
   const themeContext = useContext(ThemeContext);
 
-  if (!themeContext)
-    throw new Error("Navbar must be used inside ThemeProvider");
-
-  const { theme, toggleTheme } = themeContext;
+  if (!themeContext) {
+    throw new Error("Navbar must be used within a ThemeProvider.");
+  }
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-gray-100 shadow-lg md:shadow-xl transition-all">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="flex items-center">
-          <img src={LogoImage} alt="Logo" className="w-32 sm:w-40" />
-        </Link>
     <>
-      {/* Top Desktop Header */}
-      <header className="fixed top-0  left-0 w-full z-50 bg-gray-100 shadow-lg">
+      {/* Desktop Header */}
+      <header className="fixed top-0 left-0 w-full z-50 bg-gray-100 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+          {/* Logo */}
           <div className="flex items-center justify-between w-full lg:w-auto">
             <Link to="/" className="flex items-center space-x-2">
               <img src={LogoImage} alt="Logo" className="h-[50px]" />
@@ -49,39 +45,22 @@ export default function Navbar() {
             </Link>
 
             {/* Mobile Profile Icon */}
-            <button className="lg:hidden flex items-center justify-center rounded-full hover:bg-blue-100 transition">
+            <button
+              className="lg:hidden flex items-center justify-center rounded-full hover:bg-blue-100 transition"
+              aria-label="Profile Menu"
+            >
               <UserProfileNav />
             </button>
           </div>
 
-        {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-4 font-sans">
-          {NavItems.map((item) => (
-            <Link
-              key={item.name}
-              to={item.link}
-              className="text-sm  hover:text-blue-500 transition-colors"
-            >
-              {item.name}
-            </Link>
-          ))}
-
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="ml-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 bg-gray-700  transition-colors hover:bg-gray-400 hover:bg-gray-600"
-          >
-            {theme === "dark" ? "🌙" : "☀️"}
-          </button>
-
-          {/* Desktop Nav */}
+          {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-6">
-            {NavItems.map((item) => (
+            {navItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.link}
                 className={`flex flex-col items-center ${
-                  location.pathname === item.link
+                  location.pathname === item.link ? "text-blue-600" : ""
                 } hover:text-blue-600 transition group`}
               >
                 <div className="p-2 rounded-full group-hover:bg-blue-100">
@@ -91,17 +70,19 @@ export default function Navbar() {
               </Link>
             ))}
 
+            {/* Theme Toggle */}
+
             <UserProfileNav />
           </nav>
         </div>
       </header>
 
-      {/* Bottom Mobile Navigation */}
+      {/* Mobile Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-inner lg:hidden z-50">
         <div className="relative flex items-center justify-between px-6 py-3">
-          {/* Left items */}
+          {/* Left Items */}
           <div className="flex gap-8">
-            {NavItems.slice(0, 2).map((item) => (
+            {navItems.slice(0, 2).map((item) => (
               <Link
                 key={item.name}
                 to={item.link}
@@ -109,7 +90,7 @@ export default function Navbar() {
                   location.pathname === item.link
                     ? "text-purple-600"
                     : "text-gray-500"
-                } -purple-600 hover:text-purple-600 transition duration-200`}
+                } hover:text-purple-600 transition duration-200`}
               >
                 {item.icon}
                 <span className="text-xs mt-1">{item.name}</span>
@@ -117,23 +98,24 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Center Profile Button with Hover Effect */}
+          {/* Center Profile Button */}
           <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
             <Link
               to="/profile"
-              className={`w-16 h-16 flex flex-col items-center justify-center ${
+              className={`w-16 h-16 flex items-center justify-center ${
                 location.pathname === "/profile"
                   ? "bg-purple-100 border border-purple-400 text-purple-600"
                   : "bg-white border border-gray-300 text-gray-500"
               } rounded-full shadow-lg hover:bg-purple-200 hover:border-purple-400 hover:text-purple-700 transition duration-200`}
+              aria-label="Profile"
             >
               <User className="w-6 h-6" />
             </Link>
           </div>
 
-          {/* Right items */}
+          {/* Right Items */}
           <div className="flex gap-8">
-            {NavItems.slice(2).map((item) => (
+            {navItems.slice(2).map((item) => (
               <Link
                 key={item.name}
                 to={item.link}
@@ -152,4 +134,6 @@ export default function Navbar() {
       </nav>
     </>
   );
-}
+};
+
+export default Navbar;
