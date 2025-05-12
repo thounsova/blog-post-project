@@ -1,6 +1,7 @@
-import SocialIconsFooter from "./socialiconsFooter/socialiconsFooter";
+// import SocialIconsFooter from "./socialiconsFooter/socialiconsFooter";
 
 export default function Footer() {
+
   return (
     <footer className="bg-gray-900 mt-[100px] text-white px-6 py-10 md:px-20">
       <div className="max-w-7xl mx-auto ">
@@ -40,4 +41,5 @@ export default function Footer() {
       </div>
     </footer>
   );
+
 }

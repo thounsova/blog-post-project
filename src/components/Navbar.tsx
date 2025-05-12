@@ -1,144 +1,156 @@
 import { useContext, useState } from "react";
-import LogoImage from "../assets/logonew.png";
+import { Link, useLocation } from "react-router-dom";
+import {
+  Home,
+  FileText,
+  Info,
+  Phone,
+ 
+} from "lucide-react"; // Let's import the icons we need
+import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
+import LogoImage from "../assets/mmmm.png";
 import { ThemeContext } from "../Layout/ThemeContext";
 import UserProfileNav from "../components/UserNavigation";
-import { Link } from "react-router-dom";
 
 interface NavItem {
   name: string;
   link: string;
+  icon: JSX.Element;
 }
 
+// Updated NavItems to match the bottom nav in your image
 const NavItems: NavItem[] = [
-  { name: "HOME", link: "/" },
-  { name: "BLOG", link: "/productblog" },
-  { name: "ABOUT", link: "/productblog" },
-  { name: "CONTACT", link: "/contact" },
+  { name: "Home", link: "/", icon: <Home className="w-6 h-6" /> },
+  { name: "Blog", link: "/blog", icon: <FileText className="w-6 h-6" /> },
+  { name: "About", link: "/about", icon: <Info className="w-6 h-6" /> },
+  { name: "Contact", link: "/contact", icon: <Phone className="w-6 h-6" /> },
 ];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
   const themeContext = useContext(ThemeContext);
-  if (!themeContext)
-    throw new Error("Navbar must be used inside ThemeProvider");
 
+  if (!themeContext) throw new Error("Navbar must be used inside ThemeProvider");
   const { theme, toggleTheme } = themeContext;
-  const toggleMenu = () => setIsOpen(!isOpen);
+
+  const closeMenu = () => setIsOpen(false);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-gray-100 dark:bg-gray-800 shadow-lg md:shadow-xl transition-all">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="flex items-center">
-          <img src={LogoImage} alt="Logo" className="w-32 sm:w-40" />
-        </Link>
-
-        {/* Mobile Menu Button */}
-        <button
-          onClick={toggleMenu}
-          className="lg:hidden p-2 rounded-md bg-gray-700 text-blue-500 transition-all hover:bg-gray-600"
-        >
-          {isOpen ? (
-            <svg
-              className="h-6 text-blue-700 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          ) : (
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          )}
-        </button>
-
-        {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-4 font-sans">
-          {NavItems.map((item) => (
-            <Link
-              key={item.name}
-              to={item.link}
-              className="text-sm text-gray-900 dark:text-gray-100 hover:text-blue-500 transition-colors"
-            >
-              {item.name}
+    <>
+      <header className="fixed top-0 left-0 w-full z-50 bg-gray-100 shadow-lg md:shadow-xl transition-all">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+          {/* Logo + Mobile Theme Toggle */}
+          <div className="flex items-center justify-between w-full lg:w-auto">
+            <Link to="/" className="flex items-center space-x-2">
+              <img src={LogoImage} alt="Logo" className="h-[50px]" />
+              <h1 className="text-xl font-semibold text-blue-500 hover:text-green-700 transition duration-300">
+                beatleap
+              </h1>
             </Link>
-          ))}
 
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="ml-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-300 dark:bg-gray-700 text-black dark:text-white transition-colors hover:bg-gray-400 dark:hover:bg-gray-600"
-          >
-            {theme === "dark" ? "🌙" : "☀️"}
-          </button>
-
-          {/* User Profile */}
-          <UserProfileNav />
-        </nav>
-      </div>
-
-      {/* Mobile Sidebar */}
-      <div
-        className={`fixed top-0 right-0 h-full w-64 bg-white dark:bg-gray-900 shadow-xl transform transition-transform duration-300 z-40 ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        <div className="p-6 space-y-4">
-          {NavItems.map((item) => (
-            <Link
-              key={item.name}
-              to={item.link}
-              onClick={() => setIsOpen(false)}
-              className="block text-sm text-gray-800 dark:text-white hover:text-blue-600 transition-colors"
-            >
-              {item.name}
-            </Link>
-          ))}
-
-          {/* Mobile Theme Toggle */}
-          <div className="flex items-center justify-between mt-6">
-            <span className="text-xs text-gray-700 dark:text-gray-300">
-              Theme
-            </span>
+            {/* Mobile Theme Toggle Button (can be removed if you only want it in the desktop nav) */}
             <button
-              onClick={toggleTheme}
-              className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-300 dark:bg-gray-700 text-black dark:text-white transition-colors hover:bg-blue-400 dark:hover:bg-gray-600"
+              className="lg:hidden   flex items-center justify-center rounded-full hover:bg-blue-100 transition"
             >
-              {theme === "dark" ? "🌙" : "☀️"}
+                       <UserProfileNav />
+
             </button>
           </div>
 
-          {/* User Profile */}
-          <UserProfileNav isMobile={true} />
-        </div>
-      </div>
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-6">
+            {NavItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.link}
+                className={`flex flex-col items-center ${
+                  location.pathname === item.link ? "text-blue-600" : "text-gray-800"
+                } hover:text-blue-600 transition group`}
+              >
+                <div className="p-2 rounded-full group-hover:bg-blue-100">{item.icon}</div>
+                <span className="text-xs mt-1">{item.name}</span>
+              </Link>
+            ))}
 
-      {/* Overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30"
-          onClick={toggleMenu}
-        />
-      )}
-    </header>
+            {/* Desktop Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="ml-4 w-10 h-10 flex items-center shadow-lg justify-center rounded-full hover:bg-blue-100 transition"
+              aria-label="Toggle Theme"
+            >
+              {theme === "dark" ? (
+                <MoonIcon className="w-6 h-6 text-gray-800" />
+              ) : (
+                <SunIcon className="w-6 h-6 text-yellow-500" />
+              )}
+            </button>
+            <UserProfileNav />
+          </nav>
+        </div>
+
+        {/* Overlay for mobile menu (not used here but kept for future support) */}
+        {isOpen && (
+          <div
+            onClick={closeMenu}
+            className="fixed top-0 left-0 w-full h-full bg-black opacity-50 z-40 lg:hidden"
+          ></div>
+        )}
+      </header>
+
+      {/* Bottom Mobile Navigation */}
+        {/* Bottom Mobile Navigation */}
+      <nav className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 shadow-inner lg:hidden z-50">
+        <div className="flex flex-col items-center justify-center relative">
+          <div className="flex justify-around w-full py-2">
+            {NavItems.slice(0, 2).map((item) => (
+              <Link
+                key={item.name}
+                to={item.link}
+                className={`flex flex-col items-center ${
+                  location.pathname === item.link ? "text-purple-600" : "text-gray-500"
+                } hover:text-purple-600 transition`}
+              >
+                <div className="text-xl">{item.icon}</div>
+                <span className="text-xs mt-1">{item.name}</span>
+              </Link>
+            ))}
+
+            <div className="w-16 h-16 opacity-0 pointer-events-none" />
+
+            {NavItems.slice(2).map((item) => (
+              <Link
+                key={item.name}
+                to={item.link}
+                className={`flex flex-col items-center ${
+                  location.pathname === item.link ? "text-purple-600" : "text-gray-500"
+                } hover:text-purple-600 transition`}
+              >
+                <div className="text-xl">{item.icon}</div>
+                <span className="text-xs mt-1">{item.name}</span>
+              </Link>
+            ))}
+          </div>
+
+          {/* Central Theme Toggle Button */}
+          <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 w-16 h-16 rounded-full bg-purple-600 flex items-center justify-center shadow-lg">
+            <button
+              onClick={toggleTheme}
+              className="w-full h-full flex items-center justify-center rounded-full focus:outline-none"
+              aria-label="Toggle Theme"
+            >
+              {theme === "dark" ? (
+                <MoonIcon className="w-8 h-8 text-white" />
+              ) : (
+                <SunIcon className="w-8 h-8 text-yellow-500" />
+              )}
+            </button>
+          </div>
+        </div>
+      </nav>
+    </>
   );
 }
+
+
+
