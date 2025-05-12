@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const blog = () => {
   return (
     <div>
@@ -5,6 +6,10 @@ const blog = () => {
     
     </div>
   );
+=======
+const Blog = () => {
+  return <div></div>;
+>>>>>>> 3b8160ddf22ac20bb574422dcfb122bf6d871099
 };
 
-export default blog;
+export default Blog;

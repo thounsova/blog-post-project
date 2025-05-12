@@ -6,6 +6,7 @@ import AppRoute from "./Routes";
 import DefaultLayout from "./Layout/DefaultLayout";
 import ScrolledProgressBar from "./components/ProgressBar/ScrolledProgressBar";
 
+
 function App() {
   return (
     <DefaultLayout>

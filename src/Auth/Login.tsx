@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router";
-import LoginBackground from "../assets/door-stretching-into-fantasy-world.jpg";
 
 // Form data structure
 interface LoginFormData {
@@ -143,25 +142,22 @@ export default function Login() {
   return (
     <section
       className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
-      style={{ backgroundImage: `url(${LoginBackground})` }}
+      style={{ backgroundImage: `url()` }}
     >
-      <div className="w-full max-w-md p-6 rounded-lg border-2 border-white backdrop-blur-sm">
+      <div className="w-full max-w-md p-6 rounded-lg border-2 border-white dark:border-gray-700 dark:bg-gray-800/80 backdrop-blur-sm shadow-2xl transition-colors duration-300">
         <h1 className="text-2xl font-bold text-center text-dark mb-6">
           Welcome back!
         </h1>
 
         {errors.general && (
-          <div className="mb-4 p-2 bg-red-500 bg-opacity-80 text-white rounded-md text-sm">
+          <div className="mb-4 p-2 bg-red-500 bg-opacity-80 rounded-md text-sm">
             {errors.general}
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label
-              htmlFor="identifier"
-              className="block text-sm text-white mb-1"
-            >
+            <label htmlFor="identifier" className="block text-sm  mb-1">
               Email
             </label>
             <input
@@ -181,7 +177,7 @@ export default function Login() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="password" className="block text-sm text-white mb-1">
+            <label htmlFor="password" className="block text-sm  mb-1">
               Password
             </label>
             <input
@@ -209,11 +205,11 @@ export default function Login() {
           </button>
 
           <div className="mt-4 text-center">
-            <p className="text-sm text-white">
+            <p className="text-sm ">
               Don't have an account?{" "}
               <Link
                 to="/register"
-                className="text-blue-300 hover:text-blue-400"
+                className="text-blue-500 hover:text-blue-600"
               >
                 Register here
               </Link>
