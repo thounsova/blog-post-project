@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto ">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-20 mb-10">
 
-          <div className="ml-15 max-sm:ml-20">
+          <div className=" max-sm:ml-20">
             <h3 className="text-lg font-semibold mb-4 text-teal-400">About</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li><a href="#" className="hover:text-white">All Products</a></li>
@@ -16,7 +16,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="max-sm:ml-20 ms-20">
+          <div className="max-sm:ml-20 ms-25 ">
             <h3 className="text-lg font-semibold mb-4 text-teal-400">Company</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li><a href="#" className="hover:text-white">About Us</a></li>
@@ -26,7 +26,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="max-sm:ml-20 ms-20">
+          <div className="max-sm:ml-20 ms-47">
             <h3 className="text-lg font-semibold mb-4 text-teal-400">Support</h3>
             <ul className="space-y-2 text-sm text-gray-400">
               <li><a href="#" className="hover:text-white">FAQs</a></li>
