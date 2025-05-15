@@ -1,28 +1,23 @@
 import React, { useState } from "react";
 import { ThumbsUp, ThumbsDown, MessageCircle, Share2 } from "lucide-react";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import SponsoredPostsImage from "../../../assets/Sponsored-Posts-vs-Guest-Posts.png";
 import HobbyToBusinessImage from "../../../assets/From-Hobby-To-Business-Blogging-Can-Become-Your-Full-Time-Career-1.png";
 import BlogManagementImage from "../../../assets/Blog-Management-Platform-How-It-Helps-Bloggers.png";
+import Detail from "../../Detail/detail"
 
-// Define interfaces for component props and states
 interface VideoNewsCardProps {
   imageUrl: string;
   title: string;
   description: string;
-}
-
-interface VideoNewsSectionProps {
-  videoNewsData: Array<{
-    imageUrl: string;
-    title: string;
-    description: string;
-  }>;
+  link: string; // Adding the link prop
 }
 
 const VideoNewsCard: React.FC<VideoNewsCardProps> = ({
   imageUrl,
   title,
   description,
+  link, // Receiving the link prop
 }) => {
   const [likes, setLikes] = useState<number>(0);
   const [dislikes, setDislikes] = useState<number>(0);
@@ -67,23 +62,22 @@ const VideoNewsCard: React.FC<VideoNewsCardProps> = ({
 
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col transition-shadow duration-200 hover:shadow-lg p-4">
-      <img
-        src={imageUrl}
-        alt={title}
-        className="w-full h-48 object-fit rounded-lg"
-      />
-      <h3 className="text-lg font-bold text-gray-800 mt-4 line-clamp-2">
-        {title}
-      </h3>
-      <p className="text-gray-600 text-sm line-clamp-3 mt-1">{description}</p>
+      <Link to={link}> {/* Use the dynamic link prop here */}
+        <img
+          src={imageUrl}
+          alt={title}
+          className="w-full h-48 object-cover rounded-lg"
+        />
+        <h3 className="text-lg font-bold text-gray-800 mt-4 line-clamp-2">{title}</h3>
+        <p className="text-gray-600 text-sm line-clamp-3 mt-1">{description}</p>
+      </Link>
 
       <div className="flex items-center justify-between mt-4 text-gray-600">
         <div className="flex gap-4">
           <button
             onClick={handleLike}
-            className={`flex items-center gap-1 hover:text-blue-600 ${
-              liked && "text-blue-600"
-            }`}
+            aria-label="Like post"
+            className={`flex items-center gap-1 hover:text-blue-600 ${liked && "text-blue-600"}`}
           >
             <ThumbsUp size={18} />
             {likes}
@@ -91,9 +85,8 @@ const VideoNewsCard: React.FC<VideoNewsCardProps> = ({
 
           <button
             onClick={handleDislike}
-            className={`flex items-center gap-1 hover:text-red-600 ${
-              disliked && "text-red-600"
-            }`}
+            aria-label="Dislike post"
+            className={`flex items-center gap-1 hover:text-red-600 ${disliked && "text-red-600"}`}
           >
             <ThumbsDown size={18} />
             {dislikes}
@@ -101,6 +94,7 @@ const VideoNewsCard: React.FC<VideoNewsCardProps> = ({
 
           <button
             onClick={() => setShowComment(!showComment)}
+            aria-label={showComment ? "Hide comments" : "Show comments"}
             className="flex items-center gap-1 hover:text-green-600"
           >
             <MessageCircle size={18} />
@@ -108,7 +102,7 @@ const VideoNewsCard: React.FC<VideoNewsCardProps> = ({
           </button>
         </div>
 
-        <button className="hover:text-purple-600 flex items-center gap-1">
+        <button aria-label="Share post" className="hover:text-purple-600 flex items-center gap-1">
           <Share2 size={18} />
           Share
         </button>
@@ -146,7 +140,7 @@ const VideoNewsCard: React.FC<VideoNewsCardProps> = ({
   );
 };
 
-const VideoNewsSection: React.FC<VideoNewsSectionProps> = ({
+const VideoNewsSection: React.FC<{ videoNewsData: Array<VideoNewsCardProps> }> = ({
   videoNewsData,
 }) => {
   return (
@@ -168,29 +162,34 @@ const App: React.FC = () => {
     {
       imageUrl: BlogManagementImage,
       title:
-        "សម្រុកគ្នាសាហាវណាស់ ៧គ្រាប់ ១ប្រកួត Real Madrid និង Dortmund ខណៈ Vinicius ស៊ុត Hat-Trick",
+        "Real Madrid and Dortmund clash in 7-goal thriller with Vinicius scoring Hat-Trick",
       description:
-        "ការសង្គ្រោះប៉េណាល់ទី របស់ Raya យប់មិញ អស្ចារ្យ ហ្នឹង វីរបុរស Arsenal ម្នាក់នេះ",
+        "Raya’s penalty save last night was phenomenal, and this Arsenal hero deserves credit.",
+      link: "/detail", // Adding a link
     },
     {
       imageUrl: SponsoredPostsImage,
       title:
-        "MST Story Night បញ្ចេញ Trailer ទាក់ទាញចិត្តមនុស្សវ័យជំទង់នៅកម្ពុជា",
+        "MST Story Night releases trailer, captivating Cambodian youth",
       description:
-        "ទម្លាក់ MV ថ្មី ទាំងចង្វាក់ ក្បាច់រាំ កាយវិការ ទឹកមុខ Jennie ហ៊ឺ ខ្លាំង",
-    },
-    {
-      imageUrl: HobbyToBusinessImage,
-      title: "វៀតណាម៖ វីដេអូមួយថតជាប់ឡានធ្លាក់ចូលទន្លេ ក្នុងពេលស្ពានបាក់រលំ",
-      description:
-        "កត្តាធំៗធ្វើឱ្យ Disney ជួបការរិះគន់ទក់សាច់ពីមហាជនដោយសាររឿង Snow White",
+        "The new music video features catchy beats, dance moves, and Jennie's intense expressions.",
+      link: "/news/2", // Adding a link
     },
     {
       imageUrl: HobbyToBusinessImage,
       title:
-        "ស្អាត ឆ្លាត ពូកែ! សុភ័ក្រ្ត កុសុមា នៅមានចំណុចពិសេសទាំងនេះទៀត ធ្វើឱ្យអនាគតស្វាមី",
+        "Vietnam: A car fell into a river after a bridge collapse, as seen in a viral video",
       description:
-        "Olmo បង្ហាញខ្លួនប្រកួតដំបូងជួយ Barcelona ឈ្នះម្ចាស់ផ្ទះ Vallencano ២-១",
+        "Disney faces backlash after Snow White controversy.",
+      link: "/news/3", // Adding a link
+    },
+    {
+      imageUrl: HobbyToBusinessImage,
+      title:
+        "Sopharith Kosuma: The young entrepreneur who’s destined for greatness",
+      description:
+        "Olmo debuts to help Barcelona win 2-1 over Valencia.",
+      link: "/news/4", // Adding a link
     },
   ];
 
