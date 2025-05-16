@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 interface UserData {
@@ -12,6 +12,7 @@ export default function UserProfileNav({ isMobile = false }) {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("userData");
@@ -27,6 +28,25 @@ export default function UserProfileNav({ isMobile = false }) {
     }
   }, []);
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    }
+    if (dropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownOpen]);
+
   const handleLogout = () => {
     localStorage.removeItem("userData");
     setUserData(null);
@@ -34,16 +54,23 @@ export default function UserProfileNav({ isMobile = false }) {
     navigate("/");
   };
 
-  const handleMyFavorite = () => {
-    navigate("/favorite");
+  const handleChangeAccount = () => {
+    localStorage.removeItem("userData");
+    setUserData(null);
+    setDropdownOpen(false);
+    navigate("/login");
+  };
+
+  const handleCreateBlog = () => {
+    navigate("/create-blog");
     setDropdownOpen(false);
   };
 
   const toggleDropdown = () => setDropdownOpen((prev) => !prev);
 
-  const displayName = userData?.fullName || userData?.email.split("@")[0];
+  const displayName = userData?.email;
 
-  // ✅ Mobile version
+  // Mobile version
   if (isMobile) {
     return userData?.isLoggedIn ? (
       <div className="px-3 py-2 bg-gray-100 shadow-sm rounded-md flex items-center justify-between">
@@ -52,10 +79,10 @@ export default function UserProfileNav({ isMobile = false }) {
         </span>
         <div className="flex gap-2">
           <button
-            onClick={handleMyFavorite}
+            onClick={handleCreateBlog}
             className="px-3 py-1 text-xs font-medium text-white bg-green-500 hover:bg-green-600 rounded focus:ring-2 focus:ring-green-300 transition"
           >
-            Favorites
+            Create Blog
           </button>
           <button
             onClick={handleLogout}
@@ -81,25 +108,29 @@ export default function UserProfileNav({ isMobile = false }) {
     );
   }
 
-  // ✅ Desktop version
+  // Desktop version
   return (
-    <div className="relative ml-4">
+    <div className="relative ml-4" ref={dropdownRef}>
       {userData?.isLoggedIn ? (
         <>
           <button
             onClick={toggleDropdown}
-            className="flex items-center px-4 py-2 text-sm font-medium text-white bg-green-500 hover:bg-green-600 rounded focus:ring-2 focus:ring-green-300 transition"
+            aria-label="User menu"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 transition"
           >
-            <span className="truncate max-w-[140px]">{displayName}</span>
+            {/* Improved User Icon */}
             <svg
-              className="w-4 h-4 ml-2 text-green-200"
-              fill="currentColor"
-              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6 text-white"
             >
               <path
-                fillRule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clipRule="evenodd"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 6.75a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0"
               />
             </svg>
           </button>
@@ -110,14 +141,20 @@ export default function UserProfileNav({ isMobile = false }) {
                 {displayName}
               </div>
               <button
-                onClick={handleMyFavorite}
+                onClick={handleCreateBlog}
                 className="w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 transition"
               >
-                Favorites
+                Create Blog
+              </button>
+              <button
+                onClick={handleChangeAccount}
+                className="w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 transition"
+              >
+                Change Account
               </button>
               <button
                 onClick={handleLogout}
-                className="w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 transition"
+                className="w-full px-4 py-2 text-sm text-left text-red-600 hover:bg-gray-100 transition"
               >
                 Log Out
               </button>
