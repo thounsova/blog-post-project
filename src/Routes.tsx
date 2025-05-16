@@ -1,10 +1,10 @@
 import { Routes, Route } from "react-router-dom";
-import Contact from "./Pages/Contact/contact";
 import Home from "./Pages/Home/Home";
+import Contact from "./Pages/Contact/contact";
 import Productblog from "./Pages/productblog/productblog";
 import Login from "./Auth/Login";
 import Register from "./Auth/Register";
-import Detail from "./Pages/Detail/detail"; // fixed typo here
+import Detail from "./Pages/Detail/detail";
 
 const AppRoute = () => {
   return (
@@ -12,9 +12,9 @@ const AppRoute = () => {
       <Route path="/" element={<Home />} />
       <Route path="/productblog" element={<Productblog />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/contact" element={<Contact />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/detail" element={<Detail />} /> {/* supports dynamic ID if needed */}
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/detail/:id" element={<Detail />} />
     </Routes>
   );
 };
