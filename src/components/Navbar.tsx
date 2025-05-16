@@ -13,7 +13,11 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { name: "Home", link: "/", icon: <Home className="w-5 h-5" /> },
-  { name: "Blog", link: "/productblog", icon: <FileText className="w-5 h-5" /> },
+  {
+    name: "Blog",
+    link: "/productblog",
+    icon: <FileText className="w-5 h-5" />,
+  },
   { name: "About", link: "/about", icon: <Info className="w-5 h-5" /> },
   { name: "Contact", link: "/contact", icon: <Phone className="w-5 h-5" /> },
 ];
@@ -32,9 +36,11 @@ const Navbar: React.FC = () => {
       <header className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link to="/" className="flex  items-center space-x-2">
             <img src={LogoImage} alt="Logo" className="h-10" />
-            <h1 className="text-2xl font-bold text-blue-600 hover:text-green-600 transition-colors">beatleap</h1>
+            <h1 className="text-2xl font-bold text-blue-600 hover:text-green-600 transition-colors">
+              beatleap
+            </h1>
           </Link>
 
           {/* Mobile Profile Icon */}
@@ -49,7 +55,9 @@ const Navbar: React.FC = () => {
                 key={item.name}
                 to={item.link}
                 className={`flex flex-col items-center text-sm ${
-                  location.pathname === item.link ? "text-blue-600" : "text-gray-600"
+                  location.pathname === item.link
+                    ? "text-blue-600"
+                    : "text-gray-600"
                 } hover:text-blue-600 transition`}
               >
                 <div className="p-2 rounded-full group-hover:bg-blue-100">
@@ -73,7 +81,9 @@ const Navbar: React.FC = () => {
                 key={item.name}
                 to={item.link}
                 className={`flex flex-col items-center text-sm ${
-                  location.pathname === item.link ? "text-purple-600" : "text-gray-500"
+                  location.pathname === item.link
+                    ? "text-purple-600"
+                    : "text-gray-500"
                 } hover:text-purple-600 transition`}
               >
                 {item.icon}
@@ -105,7 +115,9 @@ const Navbar: React.FC = () => {
                 key={item.name}
                 to={item.link}
                 className={`flex flex-col items-center text-sm ${
-                  location.pathname === item.link ? "text-purple-600" : "text-gray-500"
+                  location.pathname === item.link
+                    ? "text-purple-600"
+                    : "text-gray-500"
                 } hover:text-purple-600 transition`}
               >
                 {item.icon}
