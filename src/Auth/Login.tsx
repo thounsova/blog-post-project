@@ -3,18 +3,16 @@ import { useNavigate, Link } from "react-router";
 
 // Form data structure
 interface LoginFormData {
-  identifier: string; // Using identifier instead of email to match Strapi API
+  identifier: string;
   password: string;
 }
 
-// Validation errors structure
 interface ValidationErrors {
   identifier?: string;
   password?: string;
   general?: string;
 }
 
-// User data structure
 interface UserData {
   email: string;
   isLoggedIn: boolean;
@@ -22,7 +20,6 @@ interface UserData {
   jwt: string;
 }
 
-// API response structure
 interface ApiResponse {
   jwt: string;
   user: {
@@ -47,7 +44,6 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  // Check if user is already logged in
   useEffect(() => {
     const userData = localStorage.getItem("userData");
     if (userData) {
@@ -58,7 +54,6 @@ export default function Login() {
     }
   }, [navigate]);
 
-  // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -67,7 +62,6 @@ export default function Login() {
     });
   };
 
-  // Validate form
   const validateForm = (): boolean => {
     const newErrors: ValidationErrors = {};
 
@@ -87,26 +81,18 @@ export default function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setIsLoading(true);
 
     try {
       const response = await fetch("http://62.72.46.248:1337/api/auth/local", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          identifier: formData.identifier,
-          password: formData.password,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
@@ -117,7 +103,6 @@ export default function Login() {
 
       const apiResponse = data as ApiResponse;
 
-      // Store user data in localStorage
       const userData: UserData = {
         email: apiResponse.user.email,
         isLoggedIn: true,
@@ -140,7 +125,7 @@ export default function Login() {
   };
 
   return (
-    <section
+    <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
       style={{ backgroundImage: `url()` }}
     >
@@ -157,7 +142,7 @@ export default function Login() {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="identifier" className="block text-sm  mb-1">
+            <label htmlFor="identifier" className="block text-sm mb-1">
               Email
             </label>
             <input
@@ -177,7 +162,7 @@ export default function Login() {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="password" className="block text-sm  mb-1">
+            <label htmlFor="password" className="block text-sm mb-1">
               Password
             </label>
             <input
@@ -199,13 +184,13 @@ export default function Login() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full px-4 py-2 bg-[#FF0E4D] text-white font-medium rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FF0E4D] disabled:opacity-50"
+            className="w-full px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FF0E4D] disabled:opacity-50"
           >
-            {isLoading ? "Logging in..." : "Login"}
+            {isLoading ? "Logging in..." : "Log in"}
           </button>
 
           <div className="mt-4 text-center">
-            <p className="text-sm ">
+            <p className="text-sm">
               Don't have an account?{" "}
               <Link
                 to="/register"
@@ -217,6 +202,6 @@ export default function Login() {
           </div>
         </form>
       </div>
-    </section>
+    </div>
   );
 }

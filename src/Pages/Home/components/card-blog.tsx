@@ -1,35 +1,29 @@
 import React, { useState } from "react";
 import { ThumbsUp, ThumbsDown, MessageCircle, Share2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import SponsoredPostsImage from "../../../assets/Sponsored-Posts-vs-Guest-Posts.png";
 import HobbyToBusinessImage from "../../../assets/From-Hobby-To-Business-Blogging-Can-Become-Your-Full-Time-Career-1.png";
 import BlogManagementImage from "../../../assets/Blog-Management-Platform-How-It-Helps-Bloggers.png";
 
-// Define interfaces for component props and states
 interface VideoNewsCardProps {
   imageUrl: string;
   title: string;
   description: string;
-}
-
-interface VideoNewsSectionProps {
-  videoNewsData: Array<{
-    imageUrl: string;
-    title: string;
-    description: string;
-  }>;
+  link: string;
 }
 
 const VideoNewsCard: React.FC<VideoNewsCardProps> = ({
   imageUrl,
   title,
   description,
+  link,
 }) => {
-  const [likes, setLikes] = useState<number>(0);
-  const [dislikes, setDislikes] = useState<number>(0);
-  const [liked, setLiked] = useState<boolean>(false);
-  const [disliked, setDisliked] = useState<boolean>(false);
-  const [showComment, setShowComment] = useState<boolean>(false);
-  const [commentText, setCommentText] = useState<string>("");
+  const [likes, setLikes] = useState(0);
+  const [dislikes, setDislikes] = useState(0);
+  const [liked, setLiked] = useState(false);
+  const [disliked, setDisliked] = useState(false);
+  const [showComment, setShowComment] = useState(false);
+  const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState<string[]>([]);
 
   const handleLike = () => {
@@ -66,75 +60,77 @@ const VideoNewsCard: React.FC<VideoNewsCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col transition-shadow duration-200 hover:shadow-lg p-4">
-      <img
-        src={imageUrl}
-        alt={title}
-        className="w-full h-48 object-fit rounded-lg"
-      />
-      <h3 className="text-lg font-bold text-gray-800 mt-4 line-clamp-2">
-        {title}
-      </h3>
-      <p className="text-gray-600 text-sm line-clamp-3 mt-1">{description}</p>
+    <div className="bg-white rounded-lg shadow-sm overflow-hidden flex flex-col p-3 text-sm">
+      <Link to={link}>
+        <img
+          src={imageUrl}
+          alt={title}
+          className="w-full h-36 object-cover rounded-md"
+        />
+        <h3 className="text-base font-semibold text-gray-800 mt-3 line-clamp-2">
+          {title}
+        </h3>
+        <p className="text-gray-600 text-xs line-clamp-3 mt-1">{description}</p>
+      </Link>
 
-      <div className="flex items-center justify-between mt-4 text-gray-600">
-        <div className="flex gap-4">
+      <div className="flex items-center justify-between mt-3 text-gray-500 text-xs">
+        <div className="flex gap-3">
           <button
             onClick={handleLike}
-            className={`flex items-center gap-1 hover:text-blue-600 ${
-              liked && "text-blue-600"
+            className={`flex items-center gap-1 hover:text-blue-500 ${
+              liked && "text-blue-500"
             }`}
           >
-            <ThumbsUp size={18} />
-            {likes}
+            <ThumbsUp size={14} />
+            ចូលចិត្ត {likes}
           </button>
 
           <button
             onClick={handleDislike}
-            className={`flex items-center gap-1 hover:text-red-600 ${
-              disliked && "text-red-600"
+            className={`flex items-center gap-1 hover:text-red-500 ${
+              disliked && "text-red-500"
             }`}
           >
-            <ThumbsDown size={18} />
-            {dislikes}
+            <ThumbsDown size={14} />
+            មិនចូលចិត្ត {dislikes}
           </button>
 
           <button
             onClick={() => setShowComment(!showComment)}
-            className="flex items-center gap-1 hover:text-green-600"
+            className="flex items-center gap-1 hover:text-green-500"
           >
-            <MessageCircle size={18} />
-            Comment
+            <MessageCircle size={14} />
+            មតិ
           </button>
         </div>
 
-        <button className="hover:text-purple-600 flex items-center gap-1">
-          <Share2 size={18} />
-          Share
+        <button className="hover:text-purple-500 flex items-center gap-1">
+          <Share2 size={14} />
+          ចែករំលែក
         </button>
       </div>
 
       {showComment && (
-        <div className="mt-4">
+        <div className="mt-3">
           <input
             type="text"
-            placeholder="Write a comment..."
+            placeholder="សរសេរមតិរបស់អ្នក..."
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring focus:ring-blue-300"
+            className="w-full px-2 py-1 border border-gray-300 rounded-md text-xs focus:outline-none focus:ring focus:ring-blue-200"
           />
           <button
             onClick={handleCommentSubmit}
-            className="mt-2 px-4 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
+            className="mt-2 px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600"
           >
-            Submit
+            បញ្ជូន
           </button>
 
-          <div className="mt-3 space-y-1">
+          <div className="mt-2 space-y-1">
             {comments.map((cmt, idx) => (
               <p
                 key={idx}
-                className="text-sm text-gray-700 bg-gray-100 p-2 rounded"
+                className="text-xs text-gray-700 bg-gray-100 p-2 rounded"
               >
                 {cmt}
               </p>
@@ -146,14 +142,16 @@ const VideoNewsCard: React.FC<VideoNewsCardProps> = ({
   );
 };
 
-const VideoNewsSection: React.FC<VideoNewsSectionProps> = ({
-  videoNewsData,
-}) => {
+const VideoNewsSection: React.FC<{
+  videoNewsData: Array<VideoNewsCardProps>;
+}> = ({ videoNewsData }) => {
   return (
-    <div className="bg-gray-100 py-8">
-      <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-semibold text-blue-800 mb-6">Can Post</h2>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="bg-gray-50 py-6">
+      <div className="max-w-6xl mx-auto px-4">
+        <h2 className="text-xl font-semibold text-blue-800 mb-4">
+          អត្ថបទផ្សព្វផ្សាយ
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {videoNewsData.map((item, index) => (
             <VideoNewsCard key={index} {...item} />
           ))}
@@ -167,38 +165,31 @@ const App: React.FC = () => {
   const videoNewsData = [
     {
       imageUrl: BlogManagementImage,
-      title:
-        "សម្រុកគ្នាសាហាវណាស់ ៧គ្រាប់ ១ប្រកួត Real Madrid និង Dortmund ខណៈ Vinicius ស៊ុត Hat-Trick",
-      description:
-        "ការសង្គ្រោះប៉េណាល់ទី របស់ Raya យប់មិញ អស្ចារ្យ ហ្នឹង វីរបុរស Arsenal ម្នាក់នេះ",
+      title: "ម៉ាឌ្រីដ ប៉ះ ដដមូនដ៍ក្នុងការប្រកួតដ៏រំភើប",
+      description: "ការសង្គ្រោះបាល់ប៉េណាល់ទីរបស់ Raya គឺជារឿងអស្ចារ្យ!",
+      link: "/detail",
     },
     {
       imageUrl: SponsoredPostsImage,
-      title:
-        "MST Story Night បញ្ចេញ Trailer ទាក់ទាញចិត្តមនុស្សវ័យជំទង់នៅកម្ពុជា",
-      description:
-        "ទម្លាក់ MV ថ្មី ទាំងចង្វាក់ ក្បាច់រាំ កាយវិការ ទឹកមុខ Jennie ហ៊ឺ ខ្លាំង",
+      title: "កម្មវិធី MST Story Night ទាក់ទាញយុវជនកម្ពុជា",
+      description: "បទភ្លេង និងការរាំនាំអារម្មណ៍ខ្ពស់ជាមួយវីដេអូថ្មី។",
+      link: "/news/2",
     },
     {
       imageUrl: HobbyToBusinessImage,
-      title: "វៀតណាម៖ វីដេអូមួយថតជាប់ឡានធ្លាក់ចូលទន្លេ ក្នុងពេលស្ពានបាក់រលំ",
-      description:
-        "កត្តាធំៗធ្វើឱ្យ Disney ជួបការរិះគន់ទក់សាច់ពីមហាជនដោយសាររឿង Snow White",
+      title: "រថយន្តធ្លាក់ចូលទន្លេក្រោយស្ពានរលំនៅវៀតណាម",
+      description: "វីដេអូនាំឲ្យមានការពិភាក្សាខ្លាំង។",
+      link: "/news/3",
     },
     {
       imageUrl: HobbyToBusinessImage,
-      title:
-        "ស្អាត ឆ្លាត ពូកែ! សុភ័ក្រ្ត កុសុមា នៅមានចំណុចពិសេសទាំងនេះទៀត ធ្វើឱ្យអនាគតស្វាមី",
-      description:
-        "Olmo បង្ហាញខ្លួនប្រកួតដំបូងជួយ Barcelona ឈ្នះម្ចាស់ផ្ទះ Vallencano ២-១",
+      title: "សុផារិទ្ធ គុសុីម៉ា៖ ឧស្សាហកម្មវ័យក្មេងនាំមុខ",
+      description: "អ្នកចាប់ផ្តើមវ័យក្មេងដែលមានអនាគតភ្លឺស្វាង។",
+      link: "/news/4",
     },
   ];
 
-  return (
-    <div>
-      <VideoNewsSection videoNewsData={videoNewsData} />
-    </div>
-  );
+  return <VideoNewsSection videoNewsData={videoNewsData} />;
 };
 
 export default App;
