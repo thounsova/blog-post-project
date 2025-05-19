@@ -1,7 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import Contact from "./Pages/Contact/contact";
 import Home from "./Pages/Home/Home";
-import Productblog from "./Pages/productblog/productblog";
+import Productblog from "./Pages/productblog/components/blogCardGrid";
+import Pro from "./Pages/productblog/components/hero";
 import Login from "./Auth/Login";
 import Register from "./Auth/Register";
 
