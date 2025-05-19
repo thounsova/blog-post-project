@@ -120,14 +120,12 @@ const BlogCardGrid = () => {
             }}
           />
 
-          {/* Content */}
           <div className="p-4">
             <h2 className="text-lg font-semibold text-gray-800  cursor-pointer">
               {post.title}
             </h2>
             <p className="text-sm text-gray-500 mt-1">{post.description}</p>
 
-            {/* Author Info */}
             <div className="flex items-center justify-between mt-4">
               <div className="flex items-center gap-2">
                 <img
