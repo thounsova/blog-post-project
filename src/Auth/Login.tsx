@@ -129,7 +129,7 @@ export default function Login() {
       className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
       style={{ backgroundImage: `url()` }}
     >
-      <div className="w-full max-w-md p-6 rounded-lg border-2 border-white dark:border-gray-700 dark:bg-gray-800/80 backdrop-blur-sm shadow-2xl transition-colors duration-300">
+      <div className="w-full max-w-md p-6 rounded-lg border-2 border-white  shadow-2xl transition-colors duration-300">
         <h1 className="text-2xl font-bold text-center text-dark mb-6">
           Welcome back!
         </h1>
