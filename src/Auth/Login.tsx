@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import LoginBackground from "../assets/bg.png";
+import { Link } from "react-router-dom";
 
 type FormData = {
   email: string;
@@ -11,7 +11,7 @@ type FormErrors = {
   password?: string;
 };
 
-const LoginForm: React.FC = () => {
+const Login: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
@@ -57,10 +57,7 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
-      style={{ backgroundImage: `url()` }}
-    >
+    <div className="min-h-screen flex items-center justify-center bg-cover bg-center p-4">
       <div className="bg-[#1e0557] bg-opacity-90 rounded-2xl shadow-xl p-8 w-80">
         <h2 className="text-2xl font-bold text-white mb-6">Login</h2>
         <form className="space-y-4" onSubmit={handleSubmit} noValidate>
@@ -112,13 +109,13 @@ const LoginForm: React.FC = () => {
         </form>
         <p className="mt-4 text-center text-sm text-white">
           Don’t have an account?{" "}
-          <a href="#" className="text-blue-400 hover:underline">
-            Sign up
-          </a>
+          <Link to="/register" className="text-blue-400 hover:underline">
+            register
+          </Link>
         </p>
       </div>
     </div>
   );
 };
 
-export default LoginForm;
+export default Login;
