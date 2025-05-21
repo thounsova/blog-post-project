@@ -1,7 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
 import LoginBackground from "../assets/bg.png";
 
-const LoginForm = () => {
+type FormData = {
+  email: string;
+  password: string;
+};
+
+type FormErrors = {
+  email?: string;
+  password?: string;
+};
+
+const LoginForm: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState<FormErrors>({});
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Clear error on input change
+    setErrors((prev) => ({ ...prev, [name]: undefined }));
+  };
+
+  const validate = (): FormErrors => {
+    const newErrors: FormErrors = {};
+    if (!formData.email) {
+      newErrors.email = "Email is required.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email is invalid.";
+    }
+    if (!formData.password) {
+      newErrors.password = "Password is required.";
+    }
+    return newErrors;
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    // If no errors:
+    console.log("Form submitted:", formData);
+    // proceed with login logic...
+  };
+
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
@@ -9,17 +63,43 @@ const LoginForm = () => {
     >
       <div className="bg-[#1e0557] bg-opacity-90 rounded-2xl shadow-xl p-8 w-80">
         <h2 className="text-2xl font-bold text-white mb-6">Login</h2>
-        <form className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email address"
-            className="w-full px-4 py-2 rounded-md bg-purple-500 bg-opacity-30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full px-4 py-2 rounded-md bg-purple-500 bg-opacity-30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+        <form className="space-y-4" onSubmit={handleSubmit} noValidate>
+          <div>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email address"
+              className={`w-full px-4 py-2 rounded-md bg-purple-500 bg-opacity-30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 ${
+                errors.email
+                  ? "border border-red-500 focus:ring-red-500"
+                  : "border border-transparent focus:ring-blue-400"
+              }`}
+              required
+            />
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+            )}
+          </div>
+          <div>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Password"
+              className={`w-full px-4 py-2 rounded-md bg-purple-500 bg-opacity-30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 ${
+                errors.password
+                  ? "border border-red-500 focus:ring-red-500"
+                  : "border border-transparent focus:ring-blue-400"
+              }`}
+              required
+            />
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+            )}
+          </div>
           <div className="text-right text-sm text-gray-300 hover:underline cursor-pointer">
             Forget Password?
           </div>
