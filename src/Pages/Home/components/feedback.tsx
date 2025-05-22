@@ -70,10 +70,10 @@ const PublisherFeedback: React.FC = () => {
   return (
     <section className="py-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-   
-           <h2 className="text-2xl md:text-3xl font-semibold text-center">
-          <span className="text-blue-600 font-bold">  Feedback from </span>{" "}
-our Publishers on        <span className="text-blue-600 font-bold">  Blog Management  </span>
+        <h2 className="text-2xl md:text-3xl font-semibold text-center">
+          <span className="text-blue-600 font-bold"> Feedback from </span> our
+          Publishers on{" "}
+          <span className="text-blue-600 font-bold"> Blog Management </span>
         </h2>
 
         <div className="relative max-w-xl mt-6 mx-auto">
@@ -93,7 +93,9 @@ our Publishers on        <span className="text-blue-600 font-bold">  Blog Manage
                   className="w-16 h-16 rounded-full object-cover"
                 />
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">{feedback.name}</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    {feedback.name}
+                  </h3>
                   <p className="text-sm text-gray-500">{feedback.title}</p>
                 </div>
               </div>
@@ -102,12 +104,16 @@ our Publishers on        <span className="text-blue-600 font-bold">  Blog Manage
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-5 h-5 ${i < feedback.stars ? "text-yellow-400" : "text-gray-300"}`}
+                    className={`w-5 h-5 ${
+                      i < feedback.stars ? "text-yellow-400" : "text-gray-300"
+                    }`}
                   />
                 ))}
               </div>
 
-              <p className="text-gray-700 leading-relaxed text-left">{feedback.text}</p>
+              <p className="text-gray-700 leading-relaxed text-left">
+                {feedback.text}
+              </p>
             </motion.div>
           </AnimatePresence>
         </div>
