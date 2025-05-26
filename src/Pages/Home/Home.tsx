@@ -5,7 +5,6 @@ import Feedback from "./components/feedback";
 import Pub from "./components/Blog";
 import Cardblog from "./components/card-blog"; // Corrected import statement
 // Corrected import statement
-
 function App() {
   return (
     <>
