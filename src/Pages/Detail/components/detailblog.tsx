@@ -18,7 +18,11 @@ interface BlogPost {
   createdAt: string;
 }
 
-const BlogPost = () => {
+interface BlogPostProps {
+  documentId: string;
+}
+
+const BlogPost: React.FC<BlogPostProps> = ({ documentId }) => {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -26,18 +30,26 @@ const BlogPost = () => {
     const fetchBlogPost = async () => {
       try {
         const res = await axios.get(
-          "http://62.72.46.248:1337/api/stories/5?populate=*"
+          `http://localhost:1337/api/articles?filters[documentId][$eq]=${documentId}&populate=*`
         );
-        setPost(res.data);
+
+        const blogData = res.data.data[0];
+
+        if (blogData) {
+          setPost(blogData);
+        } else {
+          setPost(null);
+        }
       } catch (error) {
-        console.error("Failed to fetch post:", error);
+        console.error("Failed to fetch blog post:", error);
+        setPost(null);
       } finally {
         setLoading(false);
       }
     };
 
     fetchBlogPost();
-  }, []);
+  }, [documentId]);
 
   if (loading) return <div className="text-center mt-10">Loading...</div>;
   if (!post)
@@ -47,13 +59,13 @@ const BlogPost = () => {
     <div className="max-w-3xl mx-auto p-4">
       <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
       <p className="text-sm text-gray-500 mb-4">
-        By {post.author?.username} •{" "}
+        By {post.author?.username || "Unknown"} •{" "}
         {new Date(post.createdAt).toLocaleDateString()}
       </p>
 
       {post.image?.[0]?.url && (
         <img
-          src={`http://62.72.46.248:1337${post.image[0].url}`}
+          src={`http://localhost:1337${post.image[0].url}`}
           alt="Blog"
           className="w-full h-auto rounded-lg shadow mb-6"
         />
