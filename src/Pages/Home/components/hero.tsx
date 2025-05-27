@@ -1,13 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion"; // 👈 Import framer-motion
-import {
-  DollarSign,
-  Timer,
-  CheckCircle,
-  Scale,
-  Handshake,
-  MessageCircle,
-} from "lucide-react";
+
 import Images from "../../../assets/you.png";
 
 const HeroWithCards: React.FC = () => {
@@ -78,71 +71,6 @@ const HeroWithCards: React.FC = () => {
       </section>
 
       {/* Feature Cards Section */}
-      <section className="px-4 sm:px-6 lg:px-20 py-12 ">
-        <h2 className="text-2xl md:text-3xl font-semibold text-center">
-          <span className="text-blue-600 font-bold">40000+ Publishers</span>{" "}
-          have chosen BM,
-          <span className="text-blue-600 font-bold"> Here's why</span>
-        </h2>
-
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {[
-            {
-              icon: (
-                <DollarSign className="text-blue-600 w-10 h-10 mx-auto mb-4" />
-              ),
-              title: "High Earning Potential",
-              desc: "Earn upwards of $2500/month with guest posts! Top publishers earn over $5000 during peak months.",
-            },
-            {
-              icon: <Timer className="text-blue-600 w-10 h-10 mx-auto mb-4" />,
-              title: "Payment Within 24-Hours",
-              desc: "Get paid whenever you request. No waiting for payout cycles—just instant 24-hour transfers.",
-            },
-            {
-              icon: (
-                <CheckCircle className="text-blue-600 w-10 h-10 mx-auto mb-4" />
-              ),
-              title: "High-Quality SEO Articles",
-              desc: "Receive SEO-optimized content to boost your site’s metrics and visibility in search engines.",
-            },
-            {
-              icon: <Scale className="text-blue-600 w-10 h-10 mx-auto mb-4" />,
-              title: "Publisher Has Final Word",
-              desc: "You have full control over approvals—no overrides, ever.",
-            },
-            {
-              icon: (
-                <Handshake className="text-blue-600 w-10 h-10 mx-auto mb-4" />
-              ),
-              title: "Life-Long Relationships",
-              desc: "We value long-term partnerships and foster trust with every publisher.",
-            },
-            {
-              icon: (
-                <MessageCircle className="text-blue-600 w-10 h-10 mx-auto mb-4" />
-              ),
-              title: "24x7 Publisher Support",
-              desc: "Our dedicated team is here round-the-clock to solve your issues promptly.",
-            },
-          ].map(({ icon, title, desc }, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="bg-white shadow-sm p-6 rounded-xl border border-gray-100 hover:shadow-md transition"
-            >
-              {icon}
-              <h3 className="text-lg font-semibold text-blue-600 mb-2 text-center">
-                {title}
-              </h3>
-              <p className="text-sm text-gray-600 text-center">{desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
     </>
   );
 };

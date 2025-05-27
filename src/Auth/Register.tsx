@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router";
-
-// Form data structure
+import React, { useState } from "react";
+import { Link } from "react-router-dom"; // <-- Import Link here
 interface RegisterFormData {
   username: string;
   email: string;
@@ -9,37 +7,11 @@ interface RegisterFormData {
   confirmPassword: string;
 }
 
-// Validation errors structure
 interface ValidationErrors {
   username?: string;
   email?: string;
   password?: string;
   confirmPassword?: string;
-  general?: string;
-}
-
-// User data structure
-interface UserData {
-  email: string;
-  username: string;
-  isLoggedIn: boolean;
-  loginTime: number;
-  jwt: string;
-}
-
-// API response structure
-interface ApiResponse {
-  jwt: string;
-  user: {
-    id: number;
-    username: string;
-    email: string;
-    provider: string;
-    confirmed: boolean;
-    blocked: boolean;
-    createdAt: string;
-    updatedAt: string;
-  };
 }
 
 export default function Register() {
@@ -51,54 +23,18 @@ export default function Register() {
   });
 
   const [errors, setErrors] = useState<ValidationErrors>({});
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
 
-  // Check if user is already logged in
-  useEffect(() => {
-    const userData = localStorage.getItem("userData");
-    if (userData) {
-      const parsedUserData: UserData = JSON.parse(userData);
-      if (parsedUserData.isLoggedIn && parsedUserData.jwt) {
-        navigate("/");
-      }
-    }
-  }, [navigate]);
-
-  // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Validate form
   const validateForm = (): boolean => {
     const newErrors: ValidationErrors = {};
-
-    if (!formData.username) {
-      newErrors.username = "Username is required";
-    } else if (formData.username.length < 3) {
-      newErrors.username = "Username must be at least 3 characters";
-    }
-
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid";
-    }
-
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
-
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Please confirm your password";
-    } else if (formData.confirmPassword !== formData.password) {
+    if (!formData.username) newErrors.username = "Username is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.password) newErrors.password = "Password is required";
+    if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
@@ -106,179 +42,87 @@ export default function Register() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
 
-    if (!validateForm()) {
-      return;
-    }
+    console.log("Form Submitted:", formData);
 
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(
-        "http://62.72.46.248:1337/api/auth/local/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: formData.username,
-            email: formData.email,
-            password: formData.password,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error?.message || "Registration failed");
-      }
-
-      const apiResponse = data as ApiResponse;
-
-      // Store user data in localStorage
-      const userData: UserData = {
-        email: apiResponse.user.email,
-        username: apiResponse.user.username,
-        isLoggedIn: true,
-        loginTime: Date.now(),
-        jwt: apiResponse.jwt,
-      };
-
-      localStorage.setItem("userData", JSON.stringify(userData));
-      navigate("/");
-    } catch (error: unknown) {
-      setErrors({
-        general:
-          error instanceof Error
-            ? error.message
-            : "Registration failed. Please try again with different credentials.",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    // Reset form
+    setFormData({
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
   };
 
   return (
-    <section
-      className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
-      style={{ backgroundImage: `url()` }}
-    >
-      <div className="w-full max-w-md p-6 rounded-lg border-2 border-white dark:border-gray-700 dark:bg-gray-800/80 backdrop-blur-sm shadow-2xl transition-colors duration-300">
-        {" "}
-        <h1 className="text-2xl font-bold text-center text-dark mb-6">
-          Create an Account
-        </h1>
-        {errors.general && (
-          <div className="mb-4 p-2 bg-red-500 bg-opacity-80  rounded-md text-sm">
-            {errors.general}
-          </div>
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-md rounded-lg p-6 w-full max-w-md space-y-4"
+      >
+        <h2 className="text-2xl font-bold text-center">Register</h2>
+
+        <input
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          placeholder="Username"
+          className="w-full border px-4 py-2 rounded"
+        />
+        {errors.username && (
+          <p className="text-red-500 text-sm">{errors.username}</p>
         )}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="username" className="block text-sm  mb-1">
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              className={`w-full px-3 py-2 bg-white/60 border rounded-md text-black placeholder-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF0E4D] ${
-                errors.username ? "border-red-500" : ""
-              }`}
-              placeholder="Choose a username"
-            />
-            {errors.username && (
-              <p className="mt-1 text-red-400 text-xs">{errors.username}</p>
-            )}
-          </div>
 
-          <div className="mb-3">
-            <label htmlFor="email" className="block text-sm mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={`w-full px-3 py-2 bg-white/60 border rounded-md text-black placeholder-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF0E4D] ${
-                errors.email ? "border-red-500" : ""
-              }`}
-              placeholder="Your email address"
-            />
-            {errors.email && (
-              <p className="mt-1 text-red-400 text-xs">{errors.email}</p>
-            )}
-          </div>
+        <input
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Email"
+          type="email"
+          className="w-full border px-4 py-2 rounded"
+        />
+        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
 
-          <div className="mb-3">
-            <label htmlFor="password" className="block text-sm  mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className={`w-full px-3 py-2 bg-white/60 border rounded-md text-black placeholder-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF0E4D] ${
-                errors.password ? "border-red-500" : ""
-              }`}
-              placeholder="Create a password"
-            />
-            {errors.password && (
-              <p className="mt-1 text-red-400 text-xs">{errors.password}</p>
-            )}
-          </div>
+        <input
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Password"
+          type="password"
+          className="w-full border px-4 py-2 rounded"
+        />
+        {errors.password && (
+          <p className="text-red-500 text-sm">{errors.password}</p>
+        )}
 
-          <div className="mb-4">
-            <label htmlFor="confirmPassword" className="block text-sm  mb-1">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              className={`w-full px-3 py-2 bg-white/60 border rounded-md text-black placeholder-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF0E4D] ${
-                errors.confirmPassword ? "border-red-500" : ""
-              }`}
-              placeholder="Confirm your password"
-            />
-            {errors.confirmPassword && (
-              <p className="mt-1 text-red-400 text-xs">
-                {errors.confirmPassword}
-              </p>
-            )}
-          </div>
+        <input
+          name="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          placeholder="Confirm Password"
+          type="password"
+          className="w-full border px-4 py-2 rounded"
+        />
+        {errors.confirmPassword && (
+          <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
+        )}
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full px-4 py-2 bg-blue-500 text-white font-medium rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FF0E4D] disabled:opacity-50"
-          >
-            {isLoading ? "Registering..." : "Register"}
-          </button>
-
-          <div className="mt-4 text-center">
-            <p className="text-sm ">
-              Already have an account?{" "}
-              <Link to="/login" className="text-blue-500 hover:text-blue-700">
-                Login here
-              </Link>
-            </p>
-          </div>
-        </form>
-      </div>
-    </section>
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+        >
+          Submit
+        </button>
+        <p className="text-center text-sm mt-4">
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-600 hover:underline">
+            Login here
+          </Link>
+        </p>
+      </form>
+    </div>
   );
 }
