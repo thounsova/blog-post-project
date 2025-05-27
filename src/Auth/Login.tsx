@@ -1,226 +1,124 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router";
-import LoginBackground from "../assets/door-stretching-into-fantasy-world.jpg";
+import React, { useState } from "react";
+import LoginBackground from "../assets/bg.png";
 
-// Form data structure
-interface LoginFormData {
-  identifier: string; // Using identifier instead of email to match Strapi API
-  password: string;
-}
-
-// Validation errors structure
-interface ValidationErrors {
-  identifier?: string;
-  password?: string;
-  general?: string;
-}
-
-// User data structure
-interface UserData {
+type FormData = {
   email: string;
-  isLoggedIn: boolean;
-  loginTime: number;
-  jwt: string;
-}
+  password: string;
+};
 
-// API response structure
-interface ApiResponse {
-  jwt: string;
-  user: {
-    id: number;
-    username: string;
-    email: string;
-    provider: string;
-    confirmed: boolean;
-    blocked: boolean;
-    createdAt: string;
-    updatedAt: string;
-  };
-}
+type FormErrors = {
+  email?: string;
+  password?: string;
+};
 
-export default function Login() {
-  const [formData, setFormData] = useState<LoginFormData>({
-    identifier: "",
+const LoginForm: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
     password: "",
   });
 
-  const [errors, setErrors] = useState<ValidationErrors>({});
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const [errors, setErrors] = useState<FormErrors>({});
 
-  // Check if user is already logged in
-  useEffect(() => {
-    const userData = localStorage.getItem("userData");
-    if (userData) {
-      const parsedUserData: UserData = JSON.parse(userData);
-      if (parsedUserData.isLoggedIn && parsedUserData.jwt) {
-        navigate("/");
-      }
-    }
-  }, [navigate]);
-
-  // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
+
+    // Clear error on input change
+    setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
-  // Validate form
-  const validateForm = (): boolean => {
-    const newErrors: ValidationErrors = {};
-
-    if (!formData.identifier) {
-      newErrors.identifier = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.identifier)) {
-      newErrors.identifier = "Email is invalid";
+  const validate = (): FormErrors => {
+    const newErrors: FormErrors = {};
+    if (!formData.email) {
+      newErrors.email = "Email is required.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email is invalid.";
     }
-
     if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+      newErrors.password = "Password is required.";
     }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return newErrors;
   };
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!validateForm()) {
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
-    setIsLoading(true);
-
-    try {
-      const response = await fetch("http://62.72.46.248:1337/api/auth/local", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          identifier: formData.identifier,
-          password: formData.password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error?.message || "Authentication failed");
-      }
-
-      const apiResponse = data as ApiResponse;
-
-      // Store user data in localStorage
-      const userData: UserData = {
-        email: apiResponse.user.email,
-        isLoggedIn: true,
-        loginTime: Date.now(),
-        jwt: apiResponse.jwt,
-      };
-
-      localStorage.setItem("userData", JSON.stringify(userData));
-      navigate("/");
-    } catch (error: unknown) {
-      setErrors({
-        general:
-          error instanceof Error
-            ? error.message
-            : "Authentication failed. Please check your credentials and try again.",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    // If no errors:
+    console.log("Form submitted:", formData);
+    // proceed with login logic...
   };
 
   return (
-    <section
+    <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
-      style={{ backgroundImage: `url(${LoginBackground})` }}
+      style={{ backgroundImage: `url()` }}
     >
-      <div className="w-full max-w-md p-6 rounded-lg border-2 border-white backdrop-blur-sm">
-        <h1 className="text-2xl font-bold text-center text-dark mb-6">
-          Welcome back!
-        </h1>
-
-        {errors.general && (
-          <div className="mb-4 p-2 bg-red-500 bg-opacity-80 text-white rounded-md text-sm">
-            {errors.general}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label
-              htmlFor="identifier"
-              className="block text-sm text-white mb-1"
-            >
-              Email
-            </label>
+      <div className="bg-[#1e0557] bg-opacity-90 rounded-2xl shadow-xl p-8 w-80">
+        <h2 className="text-2xl font-bold text-white mb-6">Login</h2>
+        <form className="space-y-4" onSubmit={handleSubmit} noValidate>
+          <div>
             <input
               type="email"
-              id="identifier"
-              name="identifier"
-              value={formData.identifier}
+              name="email"
+              value={formData.email}
               onChange={handleChange}
-              className={`w-full px-3 py-2 bg-white/60 border rounded-md text-black placeholder-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF0E4D] ${
-                errors.identifier ? "border-red-500" : "border-gray-300"
+              placeholder="Email address"
+              className={`w-full px-4 py-2 rounded-md bg-purple-500 bg-opacity-30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 ${
+                errors.email
+                  ? "border border-red-500 focus:ring-red-500"
+                  : "border border-transparent focus:ring-blue-400"
               }`}
-              placeholder="Your email address"
+              required
             />
-            {errors.identifier && (
-              <p className="mt-1 text-red-400 text-xs">{errors.identifier}</p>
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
             )}
           </div>
-
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-sm text-white mb-1">
-              Password
-            </label>
+          <div>
             <input
               type="password"
-              id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className={`w-full px-3 py-2 bg-white/60 border rounded-md text-black placeholder-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF0E4D] ${
-                errors.password ? "border-red-500" : "border-gray-300"
+              placeholder="Password"
+              className={`w-full px-4 py-2 rounded-md bg-purple-500 bg-opacity-30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 ${
+                errors.password
+                  ? "border border-red-500 focus:ring-red-500"
+                  : "border border-transparent focus:ring-blue-400"
               }`}
-              placeholder="Your password"
+              required
             />
             {errors.password && (
-              <p className="mt-1 text-red-400 text-xs">{errors.password}</p>
+              <p className="mt-1 text-sm text-red-500">{errors.password}</p>
             )}
           </div>
-
+          <div className="text-right text-sm text-gray-300 hover:underline cursor-pointer">
+            Forget Password?
+          </div>
           <button
             type="submit"
-            disabled={isLoading}
-            className="w-full px-4 py-2 bg-[#FF0E4D] text-white font-medium rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FF0E4D] disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold py-2 rounded-md transition duration-300"
           >
-            {isLoading ? "Logging in..." : "Login"}
+            Sign In
           </button>
-
-          <div className="mt-4 text-center">
-            <p className="text-sm text-white">
-              Don't have an account?{" "}
-              <Link
-                to="/register"
-                className="text-blue-300 hover:text-blue-400"
-              >
-                Register here
-              </Link>
-            </p>
-          </div>
         </form>
+        <p className="mt-4 text-center text-sm text-white">
+          Don’t have an account?{" "}
+          <a href="#" className="text-blue-400 hover:underline">
+            Sign up
+          </a>
+        </p>
       </div>
-    </section>
+    </div>
   );
-}
+};
+
+export default LoginForm;

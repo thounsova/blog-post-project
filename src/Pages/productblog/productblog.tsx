@@ -1,30 +1,49 @@
-const Productblog = () => {
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import BlogCardGrid from "./components/blogCardGrid";
+
+interface Author {
+  name: string;
+  avatar: string;
+}
+
+interface Blog {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  author: Author;
+  views?: string;
+  date: string;
+}
+
+const Productblog: React.FC = () => {
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:1337/api/blogs?populate[author][populate]=avatar&populate=image&sort=createdAt:desc"
+        );
+
+        setBlogs(res.data.data);
+      } catch (err) {
+        console.error("Failed to fetch blogs:", err);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
   return (
-    <div className="max-w-2xl mt-[70px] mx-auto p-6 bg-white shadow-lg rounded-2xl">
-      <h2 className="text-2xl font-bold mb-4">Understanding React & Tailwind CSS Integration</h2>
-      
-      <img
-        src="https://via.placeholder.com/600x300"
-        alt="Blog Visual"
-        className="w-full h-60 object-cover rounded-lg mb-4"
-      />
+    <div className="min-h-screen bg-gray-100 py-10 px-4">
+      <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6">
+        {blogs.map((post) => {
+          console.log(post);
 
-      <p className="text-gray-700 mb-4">
-        In this article, we explore how React and Tailwind CSS can work together to create modern,
-        responsive UIs quickly. You'll learn about components, utility-first styling, and best
-        practices for scalable front-end development.
-      </p>
-
-      <div className="flex items-center mt-4">
-        <img
-          src="https://via.placeholder.com/40"
-          alt="Author"
-          className="w-10 h-10 rounded-full mr-3"
-        />
-        <div>
-          <p className="text-sm font-medium text-gray-900">Jane Doe</p>
-          <p className="text-sm text-gray-500">May 7, 2025</p>
-        </div>
+          return <BlogCardGrid key={post.id} post={post} />;
+        })}
       </div>
     </div>
   );

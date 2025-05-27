@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-// User data interface
 interface UserData {
   email: string;
   fullName?: string;
@@ -13,8 +12,8 @@ export default function UserProfileNav({ isMobile = false }) {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Load user data on component mount
   useEffect(() => {
     const storedUserData = localStorage.getItem("userData");
     if (storedUserData) {
@@ -29,156 +28,153 @@ export default function UserProfileNav({ isMobile = false }) {
     }
   }, []);
 
-  // Handle logout
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    }
+    if (dropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownOpen]);
+
   const handleLogout = () => {
-    if (userData) {
-      localStorage.setItem(
-        "userData",
-        JSON.stringify({
-          ...userData,
-          isLoggedIn: false,
-        })
-      );
-
-      // Clear user data from state
-      setUserData(null);
-
-      // Close dropdown if open
-      setDropdownOpen(false);
-
-      // Navigate to login page
-      navigate("/login");
-    }
+    localStorage.removeItem("userData");
+    setUserData(null);
+    setDropdownOpen(false);
+    navigate("/");
   };
 
-  // Hangle My Favorite
-  const handleMyFavorite = () => {
-    if (userData) {
-      localStorage.setItem(
-        "userData",
-        JSON.stringify({
-          ...userData,
-          isLoggedIn: false,
-        })
-      );
-
-      // Close dropdown if open
-      setDropdownOpen(false);
-
-      // Navigate to login page
-      navigate("/favorite");
-    }
+  const handleChangeAccount = () => {
+    localStorage.removeItem("userData");
+    setUserData(null);
+    setDropdownOpen(false);
+    navigate("/login");
   };
 
-  // Toggle dropdown menu
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
+  const handleCreateBlog = () => {
+    navigate("/create-blog");
+    setDropdownOpen(false);
   };
 
-  // Mobile version of user navigation
+  const toggleDropdown = () => setDropdownOpen((prev) => !prev);
+
+  const displayName = userData?.email;
+
+  // Mobile version
   if (isMobile) {
-    return userData && userData.isLoggedIn ? (
-      <div className="block">
-        <div className="flex items-center space-x-3 text-white">
-          <div className="w-8 h-8 rounded-full bg-[#FF0E4D] flex items-center justify-center text-white font-bold">
-            {userData.fullName
-              ? userData.fullName.charAt(0).toUpperCase()
-              : userData.email.charAt(0).toUpperCase()}
-          </div>
-          <span className="text-lg truncate max-w-[150px]">
-            {userData.fullName || userData.email.split("@")[0]}
-          </span>
-          {/* call to action */}
+    return userData?.isLoggedIn ? (
+      <div className="px-3 py-2 bg-gray-100 shadow-sm rounded-md flex items-center justify-between">
+        <span className="text-sm font-medium text-green-700 truncate max-w-[120px]">
+          {displayName}
+        </span>
+        <div className="flex gap-2">
           <button
-            onClick={handleMyFavorite}
-            className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800"
+            onClick={handleCreateBlog}
+            className="px-3 py-1 text-xs font-medium text-white bg-green-500 hover:bg-green-600 rounded focus:ring-2 focus:ring-green-300 transition"
           >
-            My Favorite
+            Create Blog
           </button>
           <button
             onClick={handleLogout}
-            className="ml-2 text-sm text-gray-300 hover:text-[#FF0E4D]"
+            className="px-3 py-1 text-xs font-medium text-white bg-red-500 hover:bg-red-600 rounded focus:ring-2 focus:ring-red-300 transition"
           >
             Logout
           </button>
         </div>
       </div>
     ) : (
-      <Link to="/register" className="block">
-        <button className="flex items-center space-x-3 text-white hover:text-[#FF0E4D] transition-colors duration-300">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"
-            className="w-5 h-5 fill-current"
-            aria-hidden="true"
-          >
-            <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z" />
-          </svg>
-          <span className="text-lg">Login</span>
-        </button>
-      </Link>
+      <div className="flex gap-2">
+        <Link to="/login">
+          <button className="px-3 py-1 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded shadow-sm transition">
+            Log In
+          </button>
+        </Link>
+        <Link to="/register">
+          <button className="px-3 py-1 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded shadow-sm transition">
+            Register
+          </button>
+        </Link>
+      </div>
     );
   }
 
-  // Desktop version of user navigation
+  // Desktop version
   return (
-    <li className="relative">
-      {userData && userData.isLoggedIn ? (
+    <div className="relative ml-4" ref={dropdownRef}>
+      {userData?.isLoggedIn ? (
         <>
           <button
             onClick={toggleDropdown}
-            className="flex items-center justify-center text-white p-2 rounded-full hover:bg-gray-800 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#FF0E4D]"
+            aria-label="User menu"
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 transition"
           >
-            <div className="w-6 h-6 rounded-full bg-[#FF0E4D] flex items-center justify-center text-white font-bold">
-              {userData.fullName
-                ? userData.fullName.charAt(0).toUpperCase()
-                : userData.email.charAt(0).toUpperCase()}
-            </div>
-            <span className="sr-only">User menu</span>
+            {/* Improved User Icon */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6 text-white"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.75 6.75a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a8.25 8.25 0 0115 0"
+              />
+            </svg>
           </button>
 
-          {/* Dropdown menu */}
           {dropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-gray-900 rounded-md shadow-lg py-1 z-10">
-              <div className="px-4 py-2 text-sm text-white border-b border-gray-700">
-                <p className="font-medium truncate">
-                  {userData.fullName || userData.email.split("@")[0]}
-                </p>
-                <p className="text-gray-400 text-xs truncate">
-                  {userData.email}
-                </p>
+            <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 shadow-md rounded-md z-50">
+              <div className="px-4 py-2 text-sm font-semibold text-gray-700 border-b truncate">
+                {displayName}
               </div>
-              {/* call to action */}
               <button
-                onClick={handleMyFavorite}
-                className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800"
+                onClick={handleCreateBlog}
+                className="w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 transition"
               >
-                My Favorite
+                Create Blog
+              </button>
+              <button
+                onClick={handleChangeAccount}
+                className="w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 transition"
+              >
+                Change Account
               </button>
               <button
                 onClick={handleLogout}
-                className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800"
+                className="w-full px-4 py-2 text-sm text-left text-red-600 hover:bg-gray-100 transition"
               >
-                Logout
+                Log Out
               </button>
             </div>
           )}
         </>
       ) : (
-        <Link to="/register">
-          <button className="text-white p-2 rounded-full hover:bg-gray-800 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#FF0E4D]">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 448 512"
-              className="w-6 h-6 fill-current"
-              aria-hidden="true"
-            >
-              <path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z" />
-            </svg>
-            <span className="sr-only">User account</span>
-          </button>
-        </Link>
+        <div className="flex gap-2">
+          <Link to="/login">
+            <button className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded shadow-sm transition">
+              Log In
+            </button>
+          </Link>
+          <Link to="/register">
+            <button className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 rounded shadow-sm transition">
+              Register
+            </button>
+          </Link>
+        </div>
       )}
-    </li>
+    </div>
   );
 }
