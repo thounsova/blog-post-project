@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import images from "../../../assets/blog.png";
+import images from "../../../assets/background.png";
 
 function BlogManagementSection() {
   return (
@@ -13,6 +13,11 @@ function BlogManagementSection() {
           transition={{ duration: 0.5 }}
           viewport={{ once: true, amount: 0.4 }}
         >
+          {/* Profile Title */}
+          <p className="text-sm font-semibold text-blue-600 mb-2 uppercase tracking-wide">
+            Profile Title: Blog Manager
+          </p>
+
           <h2 className="text-2xl md:text-3xl font-semibold text-blue-700 mb-3 leading-snug">
             What is Blog Management?
           </h2>

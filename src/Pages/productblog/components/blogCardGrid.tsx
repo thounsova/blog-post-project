@@ -1,153 +1,96 @@
 import React from "react";
+import parse from "html-react-parser";
+import { Link } from "react-router-dom";
 
-// Example data array
-const blogPosts = [
-  {
-    id: 1,
-    title: "Responsive Image Gallery in Tailwind",
-    description:
-      "Learn how to build a flexible image gallery layout using grid and utility classes.",
-    image:
-      "https://cdn.dribbble.com/userupload/16522311/file/original-2e65eb7f013558ee580d67a0854e2778.jpg?resize=400x0",
-    author: {
-      name: "Prajwal Hallale",
-      avatar: "https://avatars.githubusercontent.com/u/25615135?v=4",
-    },
-    views: "9.9k",
-    date: "1 year ago",
-  },
-  {
-    id: 2,
-    title: "Tailwind CSS Tips and Tricks",
-    description:
-      "Speed up your UI workflow with these handy Tailwind utilities.",
-    image:
-      "https://cdn.dribbble.com/userupload/16522311/file/original-2e65eb7f013558ee580d67a0854e2778.jpg?resize=400x0",
-    author: {
-      name: "Alex Morgan",
-      avatar: "https://i.pravatar.cc/100?img=3",
-    },
-    views: "6.4k",
-    date: "8 months ago",
-  },
-  {
-    id: 3,
-    title: "Building Cards with React & Tailwind",
-    description:
-      "A guide to creating reusable and responsive cards in your React projects.",
-    image:
-      "https://cdn.dribbble.com/userupload/16522311/file/original-2e65eb7f013558ee580d67a0854e2778.jpg?resize=400x0",
-    author: {
-      name: "Jamie Lee",
-      avatar: "https://i.pravatar.cc/100?img=5",
-    },
-    views: "5.1k",
-    date: "3 months ago",
-  },
-  {
-    id: 3,
-    title: "Building Cards with React & Tailwind",
-    description:
-      "A guide to creating reusable and responsive cards in your React projects.",
-    image:
-      "https://cdn.dribbble.com/userupload/16522311/file/original-2e65eb7f013558ee580d67a0854e2778.jpg?resize=400x0",
-    author: {
-      name: "Jamie Lee",
-      avatar: "https://i.pravatar.cc/100?img=5",
-    },
-    views: "5.1k",
-    date: "3 months ago",
-  },
-  {
-    id: 4,
-    title: "Building Cards with React & Tailwind",
-    description:
-      "A guide to creating reusable and responsive cards in your React projects.",
-    image:
-      "https://cdn.dribbble.com/userupload/16522311/file/original-2e65eb7f013558ee580d67a0854e2778.jpg?resize=400x0",
-    author: {
-      name: "Jamie Lee",
-      avatar: "https://i.pravatar.cc/100?img=5",
-    },
-    views: "5.1k",
-    date: "3 months ago",
-  },
-  {
-    id: 5,
-    title: "Building Cards with React & Tailwind",
-    description:
-      "A guide to creating reusable and responsive cards in your React projects.",
-    image:
-      "https://cdn.dribbble.com/userupload/16522311/file/original-2e65eb7f013558ee580d67a0854e2778.jpg?resize=400x0",
-    author: {
-      name: "Jamie Lee",
-      avatar: "https://i.pravatar.cc/100?img=5",
-    },
-    views: "5.1k",
-    date: "3 months ago",
-  },
-  {
-    id: 6,
-    title: "Building Cards with React & Tailwind",
-    description:
-      "A guide to creating reusable and responsive cards in your React projects.",
-    image:
-      "https://cdn.dribbble.com/userupload/16522311/file/original-2e65eb7f013558ee580d67a0854e2778.jpg?resize=400x0",
-    author: {
-      name: "Jamie Lee",
-      avatar: "https://i.pravatar.cc/100?img=5",
-    },
-    views: "5.1k",
-    date: "3 months ago",
-  },
-];
+interface Avatar {
+  url: string;
+  formats?: {
+    thumbnail?: { url: string };
+  };
+}
 
-const BlogCardGrid = () => {
+interface Author {
+  username: string;
+  avatar: Avatar[];
+  about?: string;
+}
+
+interface Image {
+  url: string;
+  formats?: {
+    thumbnail?: { url: string };
+  };
+}
+
+interface BlogPost {
+  id: number;
+  title: string;
+  content: string;
+  image: Image[];
+  author: Author;
+  views?: string;
+  date: string;
+  documentId: string;
+}
+
+interface BlogCardGridProps {
+  post: BlogPost;
+}
+
+const BlogCardGrid: React.FC<BlogCardGridProps> = ({ post }) => {
+  const avatarUrl =
+    post.author?.avatar?.[0]?.formats?.thumbnail?.url ||
+    post.author?.avatar?.[0]?.url ||
+    "";
+
+  const imageUrl =
+    post.image?.[0]?.formats?.thumbnail?.url || post.image?.[0]?.url || "";
+
   return (
-    <div className=" mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-      {blogPosts.map((post) => (
-        <div
-          key={post.id}
-          className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200"
-        >
-          {/* Image */}
-          <div
-            className="h-48 bg-gray-300"
-            style={{
-              backgroundImage: `url(${post.image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
+    <Link to={`/blog/${post.documentId}`} className="block">
+      <div className="bg-white rounded-2xl shadow-md hover:shadow-xl border border-gray-200 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer">
+        <div className="h-48 w-full overflow-hidden rounded-t-2xl">
+          <img
+            src={imageUrl}
+            alt={post.title}
+            className="w-full h-full object-fit transition-transform duration-300 hover:scale-105"
           />
+        </div>
 
-          <div className="p-4">
-            <h2 className="text-lg font-semibold text-gray-800  cursor-pointer">
-              {post.title}
-            </h2>
-            <p className="text-sm text-gray-500 mt-1">{post.description}</p>
+        <div className="p-5">
+          <h2 className="text-xl font-bold text-gray-800 hover:text-indigo-600 transition-colors">
+            {post.title}
+          </h2>
 
-            <div className="flex items-center justify-between mt-4">
-              <div className="flex items-center gap-2">
-                <img
-                  src={post.author.avatar}
-                  alt="Author"
-                  className="w-8 h-8 rounded-full"
-                />
-                <div>
-                  <p className="text-sm font-medium text-indigo-600 hover:underline cursor-pointer">
-                    {post.author.name}
-                  </p>
-                  <p className="text-xs text-gray-400">{post.date}</p>
-                </div>
+          <div className="text-sm text-gray-600 mt-2 line-clamp-3">
+            {post.content ? parse(post.content) : ""}
+          </div>
+
+          <div className="flex items-center justify-between mt-6">
+            <div className="flex items-center gap-3">
+              <img
+                src={avatarUrl}
+                alt={post.author?.username || "author"}
+                className="w-9 h-9 rounded-full border border-indigo-200"
+              />
+              <div>
+                <p className="text-sm font-medium text-indigo-600">
+                  {post.author?.username}
+                </p>
+                {post.author?.about && (
+                  <p className="text-xs text-gray-400">{post.author.about}</p>
+                )}
+                <p className="text-xs text-gray-400">{post.date}</p>
               </div>
-              <div className="flex items-center gap-1 text-gray-500 text-sm">
-                👁️ {post.views}
-              </div>
+            </div>
+
+            <div className="text-gray-500 text-sm flex items-center gap-1">
+              👁️ {post.views || "0"}
             </div>
           </div>
         </div>
-      ))}
-    </div>
+      </div>
+    </Link>
   );
 };
 

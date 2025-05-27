@@ -15,7 +15,7 @@ const Contact: React.FC = () => {
             Publishers might have detailed questions on areas like creating
             their account, adding their sites and accessing money from their
             wallets. Our experts and support teams are always ready to help.
-            Fill the contact form and we’ll reach out within 24–48 hours.
+            Fill  the contact form and we’ll reach out within 24–48 hours.
           </p>
         </div>
 
