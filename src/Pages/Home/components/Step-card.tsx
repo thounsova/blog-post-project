@@ -18,7 +18,7 @@ const supporterLogos = [
 
 const SupportersSection = () => (
   <>
-    <section className="bg-gradient-to-b from-blue-900 to-indigo-900 py-12 text-white text-center">
+    <section className="bg-gradient-to-b from-blue-500 to-indigo-400 py-12 text-white text-center">
       <div className="max-w-5xl mx-auto px-3">
         <h2 className="text-2xl md:text-3xl font-bold mb-3">Our Supporters</h2>
         <h3 className="text-lg font-medium mb-4">SPONSORS & PARTNERS</h3>
