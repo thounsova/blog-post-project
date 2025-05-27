@@ -7,7 +7,6 @@ import Register from "./Auth/Register";
 import About from "./Pages/About/about";
 import CreateBlog from "./Auth/createblog";
 import ProfilePage from "./Auth/profile";
-import BlogPage from "./Pages/Detail/components/detailblog";
 
 const AppRoute = () => {
   return (
@@ -18,7 +17,6 @@ const AppRoute = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/create-blog" element={<CreateBlog />} />
       <Route path="/about" element={<About />} />
-      <Route path="/blogs/:documentId" element={<BlogPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/contact" element={<Contact />} />
     </Routes>
