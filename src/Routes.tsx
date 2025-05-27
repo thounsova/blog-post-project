@@ -4,6 +4,7 @@ import Home from "./Pages/Home/Home";
 import Productblog from "./Pages/productblog/productblog";
 import Login from "./Auth/Login";
 import Register from "./Auth/Register";
+import Sponsor from "../src/Pages/sponsor/sponsor";
 
 const AppRoute = () => {
   return (
@@ -15,6 +16,8 @@ const AppRoute = () => {
       <Route path="/contact" element={<Contact />} />
 
       <Route path="/register" element={<Register />} />
+
+      <Route path="/sponsor" element={<Sponsor />} />
     </Routes>
   );
 };
