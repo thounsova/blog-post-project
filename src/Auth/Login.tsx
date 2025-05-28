@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import LoginBackground from "../assets/bg.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-\
 
 type FormData = {
   email: string;
@@ -15,10 +14,7 @@ type FormErrors = {
 };
 
 const LoginForm: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState<FormData>({ email: "", password: "" });
   const [errors, setErrors] = useState<FormErrors>({});
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -26,20 +22,6 @@ const LoginForm: React.FC = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: undefined }));
-  };
-
-
-  const [errors, setErrors] = useState<FormErrors>({});
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    // Clear error on input change
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
@@ -56,7 +38,7 @@ const LoginForm: React.FC = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
@@ -72,23 +54,17 @@ const LoginForm: React.FC = () => {
           password: formData.password,
         },
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         }
       );
 
       localStorage.setItem("token", response.data.jwt);
-      navigate("/src/Auth/profile.tsx");
-      navigate("/src/Auth/createblog.tsx");
+      console.log("Login successful:", response.data.user);
+      navigate("/profile"); // Use route path, not file path
     } catch (error) {
       console.error("Login failed:", error);
-
+      setErrors({ email: "Invalid email or password." }); // generic login error
     }
-
-    // If no errors:
-    console.log("Form submitted:", formData);
-    // proceed with login logic...
   };
 
   return (
@@ -113,9 +89,7 @@ const LoginForm: React.FC = () => {
               }`}
               required
             />
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
-            )}
+            {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
           </div>
           <div>
             <input
