@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import LoginBackground from "../assets/bg.png";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+\
 
 type FormData = {
   email: string;
@@ -16,6 +19,16 @@ const LoginForm: React.FC = () => {
     email: "",
     password: "",
   });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: undefined }));
+  };
+
 
   const [errors, setErrors] = useState<FormErrors>({});
 
@@ -51,6 +64,28 @@ const LoginForm: React.FC = () => {
       return;
     }
 
+    try {
+      const response = await axios.post(
+        `${apiUrl}/api/auth/local`,
+        {
+          identifier: formData.email,
+          password: formData.password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      localStorage.setItem("token", response.data.jwt);
+      navigate("/src/Auth/profile.tsx");
+      navigate("/src/Auth/createblog.tsx");
+    } catch (error) {
+      console.error("Login failed:", error);
+
+    }
+
     // If no errors:
     console.log("Form submitted:", formData);
     // proceed with login logic...
@@ -59,7 +94,7 @@ const LoginForm: React.FC = () => {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center p-4"
-      style={{ backgroundImage: `url()` }}
+      style={{ backgroundImage: `url(${LoginBackground})` }}
     >
       <div className="bg-[#1e0557] bg-opacity-90 rounded-2xl shadow-xl p-8 w-80">
         <h2 className="text-2xl font-bold text-white mb-6">Login</h2>
