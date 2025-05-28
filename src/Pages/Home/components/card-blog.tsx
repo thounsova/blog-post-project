@@ -49,7 +49,8 @@ const BlogCardGrid: React.FC<BlogCardGridProps> = ({ post }) => {
   return (
     <div className="flex flex-col gap-2">
       {/* Card */}
-        <div className="bg-white rounded-md shadow-sm text-sm transition-shadow duration-300 overflow-hidden flex flex-col">
+      <div className="bg-white rounded-md shadow-sm text-sm transition-shadow duration-300 overflow-hidden flex flex-col h-full">
+        <Link to={`/blog/${post.documentId}`} className="block">
           <div className="h-48 w-full overflow-hidden">
             <img
               src={imageUrl}
@@ -66,7 +67,7 @@ const BlogCardGrid: React.FC<BlogCardGridProps> = ({ post }) => {
               {post.content ? parse(post.content) : ""}
             </div>
 
-            <div className="mt-auto flex items-center gap-3 pt-4 border-t border-gray-200">
+            <div className="mt-4 flex items-center gap-3 border-t border-gray-200 pt-4">
               <img
                 src={avatarUrl}
                 alt={post.author?.username || "author"}
@@ -83,16 +84,9 @@ const BlogCardGrid: React.FC<BlogCardGridProps> = ({ post }) => {
               </div>
             </div>
           </div>
-        </div>
-
-      {/* Button outside the card */}
-      <div>
-        <Link
-          to="/productblog"
-          className="inline-block px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded hover:bg-indigo-700 transition"
-        >
-          Blog More
         </Link>
+
+        {/* Blog More Button Inside Card */}
       </div>
     </div>
   );

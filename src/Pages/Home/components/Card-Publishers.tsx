@@ -32,23 +32,6 @@ function BlogManagementSection() {
             <span className="font-semibold text-green-600">$2 Million</span> to
             more than 40,000 publishers.
           </p>
-
-          <div className="mt-6 flex flex-col sm:flex-row justify-center md:justify-start gap-3">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-blue-600 text-white py-2 px-4 rounded font-medium border border-blue-600 hover:bg-blue-700 transition duration-300 text-sm"
-            >
-              About Us
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-white text-gray-700 py-2 px-4 rounded font-medium border border-gray-300 hover:bg-gray-100 transition duration-300 text-sm"
-            >
-              Contact Us
-            </motion.button>
-          </div>
         </motion.div>
 
         {/* Image Section */}

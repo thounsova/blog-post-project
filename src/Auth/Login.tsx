@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import LoginBackground from "../assets/bg.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-\
 
 type FormData = {
   email: string;
@@ -29,20 +28,6 @@ const LoginForm: React.FC = () => {
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
-
-  const [errors, setErrors] = useState<FormErrors>({});
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    // Clear error on input change
-    setErrors((prev) => ({ ...prev, [name]: undefined }));
-  };
-
   const validate = (): FormErrors => {
     const newErrors: FormErrors = {};
     if (!formData.email) {
@@ -56,7 +41,7 @@ const LoginForm: React.FC = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
@@ -72,23 +57,17 @@ const LoginForm: React.FC = () => {
           password: formData.password,
         },
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         }
       );
 
       localStorage.setItem("token", response.data.jwt);
-      navigate("/src/Auth/profile.tsx");
-      navigate("/src/Auth/createblog.tsx");
+      console.log("Login successful:", response.data.user);
+      navigate("/profile"); // Use route path, not file path
     } catch (error) {
       console.error("Login failed:", error);
-
+      setErrors({ email: "Invalid email or password." }); // generic login error
     }
-
-    // If no errors:
-    console.log("Form submitted:", formData);
-    // proceed with login logic...
   };
 
   return (
