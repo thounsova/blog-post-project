@@ -48,11 +48,8 @@ const BlogCardGrid: React.FC<BlogCardGridProps> = ({ post }) => {
 
   return (
     <Link to={`/blog/${post.documentId}`} className="block">
-      <div className="bg-white rounded-md shadow-sm  text-sm transition-shadow duration-300 overflow-hidden flex flex-col">
-        {/* Image container - no top rounded corners here as the whole card has them */}
+      <div className="bg-white rounded-md shadow-sm text-sm transition-shadow duration-300 overflow-hidden flex flex-col">
         <div className="h-48 w-full overflow-hidden">
-          {" "}
-          {/* Removed rounded-t-xl */}
           <img
             src={imageUrl}
             alt={post.title}
@@ -60,22 +57,15 @@ const BlogCardGrid: React.FC<BlogCardGridProps> = ({ post }) => {
           />
         </div>
 
-        {/* Content */}
         <div className="p-4 flex flex-col flex-grow">
-          {" "}
           <h2 className="text-xl font-bold text-gray-900 hover:text-indigo-600 transition-colors line-clamp-2">
-            {" "}
-            {/* Increased font-weight */}
             {post.title}
           </h2>
-          {/* Excerpt */}
           <div className="text-gray-700 mt-2 text-sm line-clamp-3 prose max-w-full">
             {post.content ? parse(post.content) : ""}
           </div>
-          {/* Author section */}
+
           <div className="mt-auto flex items-center gap-3 pt-4 border-t border-gray-200">
-            {" "}
-            {/* Adjusted gap and padding-top */}
             <img
               src={avatarUrl}
               alt={post.author?.username || "author"}

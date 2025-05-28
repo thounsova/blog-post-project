@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BlogCardGrid from "./components/blogCardGrid";
+import CategoryFilter from "./components/hero";
 const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
 interface Author {
@@ -11,42 +12,54 @@ interface Author {
 interface Blog {
   id: number;
   title: string;
-  description: string;
-  image: string;
+  content: string;
+  image: any[];
   author: Author;
   views?: string;
   date: string;
+  documentId: string;
+}
+
+interface Category {
+  id: number;
+  title: string;
 }
 
 const Productblog: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
+
+  const fetchBlogs = async (categoryId?: number) => {
+    try {
+      let url = `${apiUrl}/api/blogs?populate[author][populate]=avatar&populate=image&sort=createdAt:desc`;
+      if (categoryId) {
+        url += `&filters[category][id][$eq]=${categoryId}`;
+      }
+
+      const res = await axios.get(url);
+      setBlogs(res.data.data);
+    } catch (err) {
+      console.error("Failed to fetch blogs:", err);
+    }
+  };
 
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const res = await axios.get(
-          `${apiUrl}/api/blogs?populate[author][populate]=avatar&populate=image&sort=createdAt:desc`
-        );
-
-        setBlogs(res.data.data);
-      } catch (err) {
-        console.error("Failed to fetch blogs:", err);
-      }
-    };
-
-    fetchBlogs();
-  }, []);
+    fetchBlogs(selectedCategory?.id);
+  }, [selectedCategory]);
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10 px-4">
-      <div className="mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 p-6">
-        {blogs.map((post) => {
-          console.log(post);
-
-          return <BlogCardGrid key={post.id} post={post} />;
-        })}
+    <>
+      <CategoryFilter onSelectCategory={setSelectedCategory} />
+      <div className="min-h-screen bg-gray-100 py-10 px-4">
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 p-6">
+          {blogs.map((post) => (
+            <BlogCardGrid key={post.id} post={post} />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
