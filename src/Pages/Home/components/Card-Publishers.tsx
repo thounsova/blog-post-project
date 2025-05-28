@@ -33,24 +33,6 @@ function BlogManagementSection() {
             more than 40,000 publishers.
           </p>
 
-<<<<<<< HEAD
-      {/* Image Section */}
-      <motion.div
-        className="w-full md:w-1/2 flex justify-center"
-        initial={{ opacity: 0, x: 50 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        viewport={{ once: true, amount: 0.4 }}
-      >
-        <img
-          src={images}
-          alt="Blog Management Illustration"
-          className="w-full max-w-xs sm:max-w-sm md:max-w-md h-auto"
-        />
-      </motion.div>
-    </div>
-    
-=======
           <div className="mt-6 flex flex-col sm:flex-row justify-center md:justify-start gap-3">
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -85,7 +67,6 @@ function BlogManagementSection() {
         </motion.div>
       </div>
     </section>
->>>>>>> 6cb0f0fd5918763c6bd912d3fbd612badb9e3f26
   );
 }
 
