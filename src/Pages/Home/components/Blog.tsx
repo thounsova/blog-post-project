@@ -15,6 +15,64 @@ interface Post {
   profileImageSrc: string;
 }
 
+import axios from 'axios';
+
+async function fetchBlogsByCategory(category) {
+    try {
+        const response = await axios.get('https://your-api-domain.com/api/blogs', {
+            params: { category },
+        });
+        console.log(response.data); // Handle the response data
+    } catch (error) {
+        console.error('Failed to fetch blogs:', error);
+    }
+}
+
+// Example usage
+fetchBlogsByCategory('technology');
+const express = require('express');
+const app = express();
+
+const blogs = [
+    { id: 1, title: 'Tech Blog', category: 'technology' },
+    { id: 2, title: 'Health Tips', category: 'health' },
+    { id: 3, title: 'Travel Diaries', category: 'travel' },
+];
+
+app.get('/api/blogs', (req, res) => {
+    const { category } = req.query;
+    if (category) {
+        const filteredBlogs = blogs.filter(blog => blog.category === category);
+        res.json(filteredBlogs);
+    } else {
+        res.json(blogs);
+    }
+});
+
+app.listen(3000, () => console.log('Server running on port 3000'));
+
+
+
+async function fetchBlogsByCategory(category) {
+    try {
+        const response = await fetch(`https://your-api-domain.com/api/blogs?category=${encodeURIComponent(category)}`);
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        }
+        const blogs = await response.json();
+        console.log(blogs); // Handle the response data
+    } catch (error) {
+        console.error('Failed to fetch blogs:', error);
+    }
+}
+
+// Example usage
+fetchBlogsByCategory('technology');
+
+
+
+
+
 const PopularPosts: React.FC = () => {
   const posts: Post[] = [
     {
