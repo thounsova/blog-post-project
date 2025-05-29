@@ -10,6 +10,7 @@ interface Avatar {
 }
 
 interface Author {
+  id: number;
   username: string;
   avatar: Avatar[];
   about?: string;
@@ -53,7 +54,7 @@ const BlogCardGrid: React.FC<BlogCardGridProps> = ({ post }) => {
           <img
             src={imageUrl}
             alt={post.title}
-            className="w-full h-full object-fit transition-transform duration-300 hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
           />
         </div>
 
@@ -66,15 +67,20 @@ const BlogCardGrid: React.FC<BlogCardGridProps> = ({ post }) => {
           </div>
 
           <div className="mt-auto flex items-center gap-3 pt-4 border-t border-gray-200">
-            <img
-              src={avatarUrl}
-              alt={post.author?.username || "author"}
-              className="w-10 h-10 rounded-full object-cover border-2 border-indigo-400"
-            />
+            <Link to={`/profile/${post.author.username}`}>
+              <img
+                src={avatarUrl}
+                alt={post.author?.username || "author"}
+                className="w-10 h-10 rounded-full object-fit border-2 border-indigo-400 hover:scale-105 transition-transform"
+              />
+            </Link>
             <div>
-              <p className="text-indigo-700 font-medium">
+              <Link
+                to={`/profile/${post.author.username}`}
+                className="text-indigo-700 font-medium hover:underline"
+              >
                 {post.author?.username}
-              </p>
+              </Link>
               {post.author?.about && (
                 <p className="text-xs text-gray-500">{post.author.about}</p>
               )}
