@@ -54,7 +54,7 @@ const BlogCardGrid: React.FC<BlogCardGridProps> = ({ post }) => {
           <div className="h-48 w-full overflow-hidden">
             <img
               src={imageUrl}
-              alt={post.title}
+              alt={post?.title}
               className="w-full h-full object-fit transition-transform duration-300 hover:scale-105"
             />
           </div>
@@ -70,20 +70,20 @@ const BlogCardGrid: React.FC<BlogCardGridProps> = ({ post }) => {
             <div className="mt-4 flex items-center gap-3 border-t border-gray-200 pt-4">
               <img
                 src={avatarUrl}
-                alt={post.author?.username || "author"}
+                alt={post?.author?.username || "author"}
                 className="w-10 h-10 rounded-full object-cover border-2 border-indigo-400"
               />
               <div>
                 <Link
-                  to={`/profile/${post.author.username}`}
+                  to={`/profile/${post.author?.username}`}
                   className="text-indigo-700 font-medium hover:underline"
                 >
                   {post.author?.username}
                 </Link>
                 {post.author?.about && (
-                  <p className="text-xs text-gray-500">{post.author.about}</p>
+                  <p className="text-xs text-gray-500">{post?.author.about}</p>
                 )}
-                <p className="text-xs text-gray-500">{post.date}</p>
+                <p className="text-xs text-gray-500">{post?.date}</p>
               </div>
             </div>
           </div>
