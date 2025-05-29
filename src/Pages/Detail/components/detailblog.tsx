@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+
 const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
 interface ImageFormat {
@@ -35,6 +36,13 @@ interface BlogPost {
   createdAt: string;
 }
 
+interface Comment {
+  id: number;
+  username: string;
+  content: string;
+  createdAt: string;
+}
+
 const fadeSlideUpAnimation = {
   animation: "fadeSlideUp 0.6s ease-out forwards",
 };
@@ -42,6 +50,7 @@ const fadeSlideUpAnimation = {
 const BlogPost = () => {
   const { documentId } = useParams<{ documentId: string }>();
   const [post, setPost] = useState<BlogPost | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
 
   const baseURL = "http://localhost:1337";
@@ -60,28 +69,33 @@ const BlogPost = () => {
   useEffect(() => {
     if (!documentId) return;
 
-    const fetchBlogPost = async () => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(
+        // Fetch the blog post
+        const postRes = await axios.get(
           `${apiUrl}/api/blogs?filters[documentId][$eq]=${documentId}&populate=*`
         );
-
-        const blogData = res.data.data;
+        const blogData = postRes.data.data;
 
         if (blogData.length > 0) {
           setPost(blogData[0]);
+
+          // Fetch comments for the post
+          const commentsRes = await axios.get(
+            `http://localhost:1338/api/conments?filters[blogId][$eq]=${blogData[0].id}`
+          );
+          setComments(commentsRes.data.data);
         } else {
           setPost(null);
         }
       } catch (error) {
-        console.error("Failed to fetch blog post:", error);
-        setPost(null);
+        console.error("Failed to fetch data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBlogPost();
+    fetchData();
   }, [documentId]);
 
   if (loading) return <div className="text-center mt-10">Loading...</div>;
@@ -98,7 +112,6 @@ const BlogPost = () => {
 
   return (
     <>
-      {/* Add keyframes in style */}
       <style>{`
         @keyframes fadeSlideUp {
           0% {
@@ -150,13 +163,32 @@ const BlogPost = () => {
           />
         )}
 
-        {/* Scrollable content area */}
         <div
           className="prose prose-indigo max-w-none overflow-y-auto"
           style={{ maxHeight: "50vh" }}
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
-      </div>
+
+        {/* Comments Section */}
+        <div className="mt-10">
+          <h2 className="text-2xl font-semibold mb-4">Comments</h2>
+          {comments.length > 0 ? (
+            <ul className="space-y-4">
+              {comments.map((comment) => (
+                <li key={comment.id} className="border p-4 rounded-lg">
+                  <p className="text-sm text-gray-700">
+                    <strong>{comment.username}</strong>: {comment.content}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {new Date(comment.createdAt).toLocaleDateString()}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">No comments yet.</p>
+          )}
+        </div>      </div>
     </>
   );
 };
