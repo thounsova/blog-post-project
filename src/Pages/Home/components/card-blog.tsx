@@ -74,9 +74,12 @@ const BlogCardGrid: React.FC<BlogCardGridProps> = ({ post }) => {
                 className="w-10 h-10 rounded-full object-cover border-2 border-indigo-400"
               />
               <div>
-                <p className="text-indigo-700 font-medium">
+                <Link
+                  to={`/profile/${post.author.username}`}
+                  className="text-indigo-700 font-medium hover:underline"
+                >
                   {post.author?.username}
-                </p>
+                </Link>
                 {post.author?.about && (
                   <p className="text-xs text-gray-500">{post.author.about}</p>
                 )}

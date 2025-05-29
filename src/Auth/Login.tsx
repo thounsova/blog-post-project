@@ -17,7 +17,7 @@ const LoginForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({ email: "", password: "" });
   const [errors, setErrors] = useState<FormErrors>({});
   const navigate = useNavigate();
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const apiUrl = import.meta.env.VITE_API_BASE_URL;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -58,12 +58,26 @@ const LoginForm: React.FC = () => {
         }
       );
 
+      // Store JWT token
       localStorage.setItem("token", response.data.jwt);
-      console.log("Login successful:", response.data.user);
-      navigate("/profile"); // Use route path, not file path
+
+      // Store user data
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          email: response.data.user.email,
+          fullName: response.data.user.username,
+          isLoggedIn: true,
+          loginTime: Date.now(),
+        })
+      );
+
+      // Navigate and refresh to update navbar
+      navigate("/");
+      window.location.reload();
     } catch (error) {
       console.error("Login failed:", error);
-      setErrors({ email: "Invalid email or password." }); // generic login error
+      setErrors({ email: "Invalid email or password." });
     }
   };
 
@@ -121,7 +135,7 @@ const LoginForm: React.FC = () => {
         </form>
         <p className="mt-4 text-center text-sm text-white">
           Don’t have an account?{" "}
-          <a href="#" className="text-blue-400 hover:underline">
+          <a href="/register" className="text-blue-400 hover:underline">
             Sign up
           </a>
         </p>

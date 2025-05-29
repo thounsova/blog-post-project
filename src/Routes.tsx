@@ -9,6 +9,7 @@ import CreateBlog from "./Auth/createblog";
 import ProfilePage from "./Auth/profile";
 import AuthLayout from "./Layout/AuthLayout";
 import BlogPage from "./Pages/Detail/components/detailblog";
+import InstagramProfile from "./Pages/productblog/components/profileauthor";
 
 const AppRoute = () => {
   return (
@@ -21,11 +22,11 @@ const AppRoute = () => {
       <Route path="/productblog" element={<Productblog />} />
       <Route path="/login" element={<Login />} />
       <Route path="/blog/:documentId" element={<BlogPage />} />
-
       <Route path="/register" element={<Register />} />
       <Route path="/create-blog" element={<CreateBlog />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/profile/:username" element={<InstagramProfile />} />{" "}
     </Routes>
   );
 };
