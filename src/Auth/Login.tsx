@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import LoginBackground from "../assets/bg.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 type FormData = {
   email: string;
@@ -123,14 +124,14 @@ const LoginForm: React.FC = () => {
             type="submit"
             className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white font-semibold py-2 rounded-md transition duration-300"
           >
-            Sign In
+            Log in
           </button>
         </form>
         <p className="mt-4 text-center text-sm text-white">
           Don’t have an account?{" "}
-          <a href="#" className="text-blue-400 hover:underline">
-            Sign up
-          </a>
+          <Link to="/register" className="text-blue-600 hover:underline">
+            Register
+          </Link>
         </p>
       </div>
     </div>
