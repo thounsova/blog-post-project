@@ -70,7 +70,7 @@ export default function UserProfileNav({ isMobile = false }) {
 
   const displayName = userData?.email;
 
-  // Mobile version
+  // ✅ Mobile Version
   if (isMobile) {
     return userData?.isLoggedIn ? (
       <div className="px-3 py-2 bg-gray-100 shadow-sm rounded-md flex items-center justify-between">
@@ -84,6 +84,11 @@ export default function UserProfileNav({ isMobile = false }) {
           >
             Create Blog
           </button>
+          <Link to="/profile">
+            <button className="px-3 py-1 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded transition">
+              Profile
+            </button>
+          </Link>
           <button
             onClick={handleLogout}
             className="px-3 py-1 text-xs font-medium text-white bg-red-500 hover:bg-red-600 rounded focus:ring-2 focus:ring-red-300 transition"
@@ -108,7 +113,7 @@ export default function UserProfileNav({ isMobile = false }) {
     );
   }
 
-  // Desktop version
+  // ✅ Desktop Version
   return (
     <div className="relative ml-4" ref={dropdownRef}>
       {userData?.isLoggedIn ? (
@@ -118,7 +123,7 @@ export default function UserProfileNav({ isMobile = false }) {
             aria-label="User menu"
             className="flex items-center justify-center w-10 h-10 rounded-full bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 transition"
           >
-            {/* Improved User Icon */}
+            {/* User Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -140,6 +145,11 @@ export default function UserProfileNav({ isMobile = false }) {
               <div className="px-4 py-2 text-sm font-semibold text-gray-700 border-b truncate">
                 {displayName}
               </div>
+              <Link to="/profile">
+                <button className="w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 transition">
+                  Profile
+                </button>
+              </Link>
               <button
                 onClick={handleCreateBlog}
                 className="w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-100 transition"

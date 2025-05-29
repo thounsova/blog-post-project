@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; // <-- Import Link here
+import { Link, useNavigate } from "react-router-dom"; // 👈 useNavigate imported
+
 interface RegisterFormData {
   username: string;
   email: string;
@@ -23,6 +24,10 @@ export default function Register() {
   });
 
   const [errors, setErrors] = useState<ValidationErrors>({});
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate(); // 👈 initialize navigate
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -42,19 +47,59 @@ export default function Register() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setApiError(null);
     if (!validateForm()) return;
 
-    console.log("Form Submitted:", formData);
+    setLoading(true);
 
-    // Reset form
-    setFormData({
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
+    try {
+      const response = await fetch(
+        "http://localhost:1337/api/auth/local/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: formData.username,
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        let message = data?.error?.message || "Registration failed";
+        if (
+          message.toLowerCase().includes("email") &&
+          message.toLowerCase().includes("taken")
+        ) {
+          message = "Email or Username is already in use";
+        }
+        throw new Error(message);
+      }
+
+      // Save user data to localStorage
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          email: data.user.email,
+          isLoggedIn: true,
+          loginTime: Date.now(),
+        })
+      );
+
+      // Redirect to home page
+      navigate("/"); // 👈 go to home page after registration
+    } catch (error: any) {
+      setApiError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -64,6 +109,10 @@ export default function Register() {
         className="bg-white shadow-md rounded-lg p-6 w-full max-w-md space-y-4"
       >
         <h2 className="text-2xl font-bold text-center">Register</h2>
+
+        {apiError && (
+          <p className="text-red-500 text-sm text-center">{apiError}</p>
+        )}
 
         <input
           name="username"
@@ -113,9 +162,11 @@ export default function Register() {
         <button
           type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+          disabled={loading}
         >
-          Submit
+          {loading ? "Registering..." : "Submit"}
         </button>
+
         <p className="text-center text-sm mt-4">
           Already have an account?{" "}
           <Link to="/login" className="text-blue-600 hover:underline">
