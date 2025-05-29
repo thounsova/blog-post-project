@@ -24,7 +24,7 @@ const Productblog: React.FC = () => {
     const fetchBlogs = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:1337/api/blogs?populate[author][populate]=avatar&populate=image&sort=createdAt:desc"
+          "http://localhost:1338/api/blogs?populate[author][populate]=avatar&populate=image&sort=createdAt:desc"
         );
 
         setBlogs(res.data.data);
