@@ -9,13 +9,10 @@ import Detail from "./Pages/Detail/components/detailblog";
 import CreateBlog from "./Auth/createblog";
 import ProfilePage from "./Auth/profile";
 import AuthLayout from "./Layout/AuthLayout";
-import AuthorPage from "./Pages/Author/AuthorPage";
 
 const AppRoute = () => {
   return (
     <Routes>
-      <Route path="/author/:username" element={<AuthorPage />} />
-      <Route path="/author/:authorId" element={<AuthorPage />} />
       <Route element={<AuthLayout />}>
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/create-blog" element={<CreateBlog />} />
