@@ -72,7 +72,6 @@ const Productblog: React.FC = () => {
       <Card />
       <Step />
       <Feedback />
-      {/* Add any additional components or sections here */}
     </>
   );
 };

@@ -41,7 +41,7 @@ const CategoryFilter: React.FC<Props> = ({ onSelectCategory }) => {
   };
 
   return (
-    <section className="bg-white mt-17 py-10">
+    <section className="bg-white py-10">
       <div className="max-w-7xl mx-auto px-4 text-center">
         <div className="flex flex-wrap justify-center gap-4">
           <button

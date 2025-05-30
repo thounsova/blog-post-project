@@ -14,7 +14,10 @@ type FormErrors = {
 };
 
 const LoginForm: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({ email: "", password: "" });
+  const [formData, setFormData] = useState<FormData>({
+    email: "",
+    password: "",
+  });
   const [errors, setErrors] = useState<FormErrors>({});
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_BASE_URL;
@@ -58,13 +61,11 @@ const LoginForm: React.FC = () => {
         }
       );
 
-      // Store JWT token
       localStorage.setItem("token", response.data.jwt);
-
-      // Store user data
       localStorage.setItem(
         "userData",
         JSON.stringify({
+          id: response.data.user.id,
           email: response.data.user.email,
           fullName: response.data.user.username,
           isLoggedIn: true,
@@ -72,8 +73,7 @@ const LoginForm: React.FC = () => {
         })
       );
 
-      // Navigate and refresh to update navbar
-      navigate("/");
+      navigate("/profile"); // Navigate to your profile page route
       window.location.reload();
     } catch (error) {
       console.error("Login failed:", error);
@@ -103,7 +103,9 @@ const LoginForm: React.FC = () => {
               }`}
               required
             />
-            {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+            )}
           </div>
           <div>
             <input

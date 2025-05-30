@@ -10,6 +10,7 @@ import ProfilePage from "./Auth/profile";
 import AuthLayout from "./Layout/AuthLayout";
 import BlogPage from "./Pages/Detail/components/detailblog";
 import InstagramProfile from "./Pages/productblog/components/profileauthor";
+import Profile from "./Auth/profile";
 
 const AppRoute = () => {
   return (
@@ -27,6 +28,7 @@ const AppRoute = () => {
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/profile/:username" element={<InstagramProfile />} />{" "}
+      <Route path="/instagram/:username" element={<Profile />} />
     </Routes>
   );
 };

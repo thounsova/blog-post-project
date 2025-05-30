@@ -88,8 +88,6 @@ const BlogCardGrid: React.FC<BlogCardGridProps> = ({ post }) => {
             </div>
           </div>
         </Link>
-
-        {/* Blog More Button Inside Card */}
       </div>
     </div>
   );
